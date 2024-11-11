@@ -8,6 +8,7 @@ import org.springframework.lang.NonNull;
 import java.util.List;
 
 @Entity
+@Table(name = "users")
 @Inheritance(strategy = InheritanceType.JOINED)
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
@@ -53,16 +54,11 @@ public abstract class User {
     @Column
     private Integer enrollmentMonth;
 
-    @Column
-    private String noteField;
-
-
     @ManyToMany(mappedBy = "users")
     private List<Event> events;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Membership> memberships;
-
 
     protected User(UserType userType) {
         this.userType = userType;
@@ -134,14 +130,6 @@ public abstract class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getNoteField() {
-        return noteField;
-    }
-
-    public void setNoteField(String noteField) {
-        this.noteField = noteField;
     }
 
     public List<Membership> getMemberships() {

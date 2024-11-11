@@ -24,6 +24,7 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.33'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    implementation 'org.postgresql:postgresql:42.2.23'
 }
 
 tasks.named('test') {
