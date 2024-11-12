@@ -1,5 +1,7 @@
 package nl.maastrichtuniversity.myusc.security;
 
+import nl.maastrichtuniversity.myusc.model.RoleModel;
+import nl.maastrichtuniversity.myusc.model.UserModel;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -67,4 +69,4 @@ public class MyUSCUserDetails implements UserDetails {
 }
 
 
-}
+

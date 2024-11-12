@@ -1,5 +1,6 @@
 package nl.maastrichtuniversity.myusc.model;
 
+import nl.maastrichtuniversity.myusc.entities.User;
 import nl.maastrichtuniversity.myusc.repository.LocationRepository;
 import nl.maastrichtuniversity.myusc.repository.SportRepository;
 import org.springframework.beans.factory.annotation.Autowired;

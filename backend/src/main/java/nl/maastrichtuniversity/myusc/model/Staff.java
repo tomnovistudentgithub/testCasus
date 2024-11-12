@@ -1,6 +1,7 @@
 package nl.maastrichtuniversity.myusc.model;
 
 import jakarta.persistence.*;
+import nl.maastrichtuniversity.myusc.entities.User;
 
 @Entity
 //@DiscriminatorValue("STAFF")
@@ -16,13 +17,13 @@ public class Staff extends User {
     @Enumerated(EnumType.STRING)
     private UserType userType;
 
-    public Staff(UserType userType) {
-        super(userType);
-    }
-
-    public Staff() {
-        super(UserType.STAFF);
-    }
+//    public Staff(UserType userType) {
+//        super(userType);
+//    }
+//
+//    public Staff() {
+//        super(UserType.STAFF);
+//    }
 
     public String getDepartment() {
         return department;

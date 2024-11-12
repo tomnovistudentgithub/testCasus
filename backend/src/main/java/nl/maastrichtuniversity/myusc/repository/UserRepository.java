@@ -1,9 +1,8 @@
 package nl.maastrichtuniversity.myusc.repository;
 
-import nl.maastrichtuniversity.myusc.model.User;
+import nl.maastrichtuniversity.myusc.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Optional;
 
@@ -18,5 +17,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByEmail(String email);
 
     void deleteById(Long id);
+
+    Optional<User> findByUserName(String username);
+    Optional<User> findByUserNameAndPassword(String username, String password);
 
 }

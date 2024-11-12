@@ -1,6 +1,7 @@
 package nl.maastrichtuniversity.myusc.model;
 
 import jakarta.persistence.*;
+import nl.maastrichtuniversity.myusc.entities.User;
 
 @Entity
 //@DiscriminatorValue("ADMIN")
@@ -10,13 +11,13 @@ public class Admin extends User {
     private String department;
 
 
-    public Admin(UserType userType) {
-        super(userType);
-    }
-
-    public Admin() {
-        super(UserType.ADMIN);
-    }
+//    public Admin(UserType userType) {
+//        super(userType);
+//    }
+//
+//    public Admin() {
+//        super(UserType.ADMIN);
+//    }
 
     public String getDepartment() {
         return department;

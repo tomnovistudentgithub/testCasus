@@ -2,13 +2,12 @@ package nl.maastrichtuniversity.myusc.service;
 
 import nl.maastrichtuniversity.myusc.model.Membership;
 import nl.maastrichtuniversity.myusc.model.MembershipDto;
-import nl.maastrichtuniversity.myusc.model.User;
+import nl.maastrichtuniversity.myusc.entities.User;
 import nl.maastrichtuniversity.myusc.repository.MembershipRepository;
 import nl.maastrichtuniversity.myusc.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Optional;
 
 @Service
 public class MembershipService {

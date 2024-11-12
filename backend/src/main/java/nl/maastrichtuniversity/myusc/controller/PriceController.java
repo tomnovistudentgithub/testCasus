@@ -1,8 +1,7 @@
 package nl.maastrichtuniversity.myusc.controller;
 
-import nl.maastrichtuniversity.myusc.model.Price;
 import nl.maastrichtuniversity.myusc.model.PriceRequestDto;
-import nl.maastrichtuniversity.myusc.model.User;
+import nl.maastrichtuniversity.myusc.entities.User;
 import nl.maastrichtuniversity.myusc.repository.UserRepository;
 import nl.maastrichtuniversity.myusc.service.PriceService;
 import org.springframework.beans.factory.annotation.Autowired;

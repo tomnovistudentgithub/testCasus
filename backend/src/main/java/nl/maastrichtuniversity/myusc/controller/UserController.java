@@ -1,5 +1,6 @@
 package nl.maastrichtuniversity.myusc.controller;
 
+import nl.maastrichtuniversity.myusc.entities.User;
 import nl.maastrichtuniversity.myusc.model.*;
 import nl.maastrichtuniversity.myusc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

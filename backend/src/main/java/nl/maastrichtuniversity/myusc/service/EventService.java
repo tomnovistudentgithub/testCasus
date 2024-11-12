@@ -1,5 +1,6 @@
 package nl.maastrichtuniversity.myusc.service;
 
+import nl.maastrichtuniversity.myusc.entities.User;
 import nl.maastrichtuniversity.myusc.model.*;
 import nl.maastrichtuniversity.myusc.model.Event;
 import nl.maastrichtuniversity.myusc.repository.EventRepository;

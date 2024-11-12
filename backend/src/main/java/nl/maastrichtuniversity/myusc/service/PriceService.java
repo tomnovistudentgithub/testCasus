@@ -2,7 +2,7 @@ package nl.maastrichtuniversity.myusc.service;
 
 import nl.maastrichtuniversity.myusc.model.MembershipType;
 import nl.maastrichtuniversity.myusc.model.Price;
-import nl.maastrichtuniversity.myusc.model.User;
+import nl.maastrichtuniversity.myusc.entities.User;
 import nl.maastrichtuniversity.myusc.model.UserType;
 import nl.maastrichtuniversity.myusc.repository.PriceRepository;
 import nl.maastrichtuniversity.myusc.repository.UserRepository;
