@@ -1,6 +1,6 @@
-package nl.maastrichtuniversity.myusc.model;
+package nl.maastrichtuniversity.myusc.dtos;
 
-import java.util.List;
+import nl.maastrichtuniversity.myusc.model.SportType;
 
 public class SportDto {
 

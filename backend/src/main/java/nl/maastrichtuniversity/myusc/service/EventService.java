@@ -1,7 +1,8 @@
 package nl.maastrichtuniversity.myusc.service;
 
+import nl.maastrichtuniversity.myusc.dtos.EventDto;
 import nl.maastrichtuniversity.myusc.entities.User;
-import nl.maastrichtuniversity.myusc.model.*;
+import nl.maastrichtuniversity.myusc.dtos.EventDTOMapper;
 import nl.maastrichtuniversity.myusc.model.Event;
 import nl.maastrichtuniversity.myusc.repository.EventRepository;
 import nl.maastrichtuniversity.myusc.repository.LocationRepository;
@@ -20,10 +21,10 @@ public class EventService {
     private final SportRepository sportRepository;
     private final LocationRepository locationRepository;
     private final UserRepository userRepository;
-    private final EventMapper eventMapper;
+    private final EventDTOMapper eventMapper;
 
     @Autowired
-    public EventService(EventRepository eventRepository, SportRepository sportRepository, LocationRepository locationRepository, UserRepository userRepository, EventMapper eventMapper) {
+    public EventService(EventRepository eventRepository, SportRepository sportRepository, LocationRepository locationRepository, UserRepository userRepository, EventDTOMapper eventMapper) {
         this.eventRepository = eventRepository;
         this.sportRepository = sportRepository;
         this.locationRepository = locationRepository;

@@ -2,7 +2,7 @@ package nl.maastrichtuniversity.myusc.service;
 
 
 import nl.maastrichtuniversity.myusc.model.Sport;
-import nl.maastrichtuniversity.myusc.model.SportDto;
+import nl.maastrichtuniversity.myusc.dtos.SportDto;
 import nl.maastrichtuniversity.myusc.repository.SportRepository;
 import org.springframework.stereotype.Service;
 

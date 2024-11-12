@@ -1,7 +1,7 @@
 package nl.maastrichtuniversity.myusc.service;
 
 import nl.maastrichtuniversity.myusc.model.Membership;
-import nl.maastrichtuniversity.myusc.model.MembershipDto;
+import nl.maastrichtuniversity.myusc.dtos.MembershipDto;
 import nl.maastrichtuniversity.myusc.entities.User;
 import nl.maastrichtuniversity.myusc.repository.MembershipRepository;
 import nl.maastrichtuniversity.myusc.repository.UserRepository;

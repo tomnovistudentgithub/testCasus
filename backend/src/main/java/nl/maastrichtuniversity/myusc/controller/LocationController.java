@@ -1,7 +1,7 @@
 package nl.maastrichtuniversity.myusc.controller;
 
 
-import nl.maastrichtuniversity.myusc.model.LocationDto;
+import nl.maastrichtuniversity.myusc.dtos.LocationDto;
 import nl.maastrichtuniversity.myusc.service.LocationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -28,9 +28,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/public/**").permitAll()
+//                        .requestMatchers("/users/**").hasRole("ADMIN")
+                        .requestMatchers("api/users/register").permitAll()
+                        .requestMatchers("/").permitAll()
                         .requestMatchers("/secure").authenticated()
                         .requestMatchers("/secure/admin").hasRole("ADMIN")
-                        .requestMatchers("/users/**").hasRole("ADMIN")
                         .requestMatchers("/secure/user").hasRole("USER")
                         .anyRequest().denyAll()
                 )

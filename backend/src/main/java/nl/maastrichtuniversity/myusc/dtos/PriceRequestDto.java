@@ -1,4 +1,7 @@
-package nl.maastrichtuniversity.myusc.model;
+package nl.maastrichtuniversity.myusc.dtos;
+
+import nl.maastrichtuniversity.myusc.model.MembershipType;
+import nl.maastrichtuniversity.myusc.model.UserType;
 
 public class PriceRequestDto {
 

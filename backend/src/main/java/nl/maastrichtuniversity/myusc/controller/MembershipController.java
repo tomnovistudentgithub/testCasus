@@ -2,7 +2,7 @@ package nl.maastrichtuniversity.myusc.controller;
 
 
 import nl.maastrichtuniversity.myusc.model.Membership;
-import nl.maastrichtuniversity.myusc.model.MembershipDto;
+import nl.maastrichtuniversity.myusc.dtos.MembershipDto;
 import nl.maastrichtuniversity.myusc.service.MembershipService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
