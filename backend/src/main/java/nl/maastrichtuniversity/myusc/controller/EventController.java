@@ -12,6 +12,8 @@ import nl.maastrichtuniversity.myusc.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -88,6 +90,16 @@ public class EventController {
     @PostMapping("/{eventId}/register/{userId}")
     public ResponseEntity<?> registerUser(@PathVariable("eventId") Long eventId, @PathVariable("userId") Long userId) {
         try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String authenticatedUsername = authentication.getName();
+
+            User authenticatedUser = userRepository.findByUserName(authenticatedUsername)
+                    .orElseThrow(() -> new RuntimeException("Authenticated user not found"));
+
+            if (!authenticatedUser.getId().equals(userId)) {
+                return new ResponseEntity<>("You can only register for events for yourself", HttpStatus.FORBIDDEN);
+            }
+
             Event event = eventRepository.findEventById(eventId)
                     .orElseThrow(() -> new RuntimeException("Event with id " + eventId + " does not exist"));
             User user = userRepository.findById(userId)

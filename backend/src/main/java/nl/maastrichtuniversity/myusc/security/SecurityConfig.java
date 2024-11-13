@@ -2,6 +2,7 @@ package nl.maastrichtuniversity.myusc.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,14 +29,14 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/public/**").permitAll()
-//                        .requestMatchers("/users/**").hasRole("ADMIN")
-                        .requestMatchers("api/users/register").permitAll()
+                        .requestMatchers("/api/users/register").permitAll()
                         .requestMatchers("/").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/events/**").authenticated()
+                        .requestMatchers(HttpMethod.POST,  "/api/events/addEvent").hasAnyRole("PLANNER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/events/{eventId}/register/{userId}").hasRole("USER")
                         .requestMatchers("/secure").authenticated()
-                        .requestMatchers("/secure/user").hasRole("ADMIN")
                         .requestMatchers("/secure/admin").hasRole("ADMIN")
                         .requestMatchers("/secure/user").hasRole("USER")
-
                         .anyRequest().denyAll()
                 )
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
