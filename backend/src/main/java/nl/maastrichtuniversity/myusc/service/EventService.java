@@ -41,8 +41,8 @@ public class EventService {
     public EventDto addEvent(EventDto eventDto) {
         Event event = eventMapper.toEntityForCreate(eventDto);
 
-        List<User> users = eventDto.getParticipantIds().stream()
-                .map(id -> userRepository.findById(id).orElseThrow(() -> new RuntimeException("User with id " + id + " does not exist")))
+        List<User> users = eventDto.getParticipants().stream()
+                .map(userDTO -> userRepository.findById(userDTO.getId()).orElseThrow(() -> new RuntimeException("User with id " + userDTO.getId() + " does not exist")))
                 .collect(Collectors.toList());
         event.setUsers(users);
 
@@ -55,6 +55,10 @@ public class EventService {
 
 
     public void registerUser(Event event, User user) {
+        if (event.getUsers().contains(user)) {
+            throw new RuntimeException("User is already registered for this event.");
+        }
+
         if (event.getUsers().size() < event.getLocation().getCapacity()) {
             event.getUsers().add(user);
             event.setAvailablePlaces(event.getAvailablePlaces() - 1);

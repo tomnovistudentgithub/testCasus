@@ -36,8 +36,6 @@ public class Event {
     private LocalTime startTime;
     private LocalTime endTime;
 
-    @Enumerated(EnumType.STRING)
-    private TargetAudience targetAudience;
 
     @ManyToOne
     @JoinColumn(name = "sport_id")
@@ -83,15 +81,6 @@ public class Event {
         this.sport = sport;
     }
 
-    public TargetAudience getTargetAudience() {
-        return targetAudience;
-    }
-
-
-
-    public void setTargetAudience(TargetAudience targetAudience) {
-        this.targetAudience = targetAudience;
-    }
     public Long getId() {
         return id;
     }

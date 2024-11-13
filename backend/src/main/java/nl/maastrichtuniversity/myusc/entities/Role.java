@@ -1,5 +1,6 @@
 package nl.maastrichtuniversity.myusc.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ public class Role {
     private boolean active;
     private String description;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "roles")
     private List<User> users = new ArrayList<>();
 

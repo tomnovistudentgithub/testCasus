@@ -1,10 +1,7 @@
 package nl.maastrichtuniversity.myusc.model;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -25,7 +22,7 @@ public class Sport {
     @Enumerated(EnumType.STRING)
     private SportType sportType;
 
-
+    @JsonIgnore
     @OneToMany(mappedBy = "sport")
     private List<Event> events;
 

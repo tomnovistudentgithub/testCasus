@@ -19,20 +19,11 @@ public class Membership {
     private UserType userType;
 
     @Column
-    private int enrollmentYear;
-
-    @Column
-    private int enrollmentMonth;
-
-    @Column
     private double price;
     @Column
     private LocalDate startDate;
     @Column
     private LocalDate expirationDate;
-
-    @Column
-    private Boolean isActive;
 
     public LocalDate getStartDate() {
         return startDate;
@@ -50,22 +41,12 @@ public class Membership {
         this.expirationDate = expirationDate;
     }
 
-    public Boolean getActive() {
-        return isActive;
-    }
-
-    public void setActive(Boolean active) {
-        isActive = active;
-    }
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonBackReference
     private User user;
 
-    public Membership() {
-
-    }
 
     public MembershipType getMembershipType() {
         return membershipType;
@@ -81,22 +62,6 @@ public class Membership {
 
     public void setUserType(UserType userType) {
         this.userType = userType;
-    }
-
-    public int getEnrollmentYear() {
-        return enrollmentYear;
-    }
-
-    public void setEnrollmentYear(int enrollmentYear) {
-        this.enrollmentYear = enrollmentYear;
-    }
-
-    public int getEnrollmentMonth() {
-        return enrollmentMonth;
-    }
-
-    public void setEnrollmentMonth(int enrollmentMonth) {
-        this.enrollmentMonth = enrollmentMonth;
     }
 
     public double getPrice() {

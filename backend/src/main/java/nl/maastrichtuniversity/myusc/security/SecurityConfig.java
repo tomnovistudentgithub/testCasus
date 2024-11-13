@@ -34,6 +34,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/events/**").authenticated()
                         .requestMatchers(HttpMethod.POST,  "/api/events/addEvent").hasAnyRole("PLANNER", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/events/{eventId}/register/{userId}").hasRole("USER")
+                        .requestMatchers(HttpMethod.POST, "/api/events/{eventId}/deregister/{userId}").hasRole("USER")
                         .requestMatchers("/secure").authenticated()
                         .requestMatchers("/secure/admin").hasRole("ADMIN")
                         .requestMatchers("/secure/user").hasRole("USER")

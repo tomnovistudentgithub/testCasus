@@ -36,7 +36,6 @@ public class EventDTOMapper {
         dto.setEndDate(event.getEndDate());
         dto.setStartTime(event.getStartTime());
         dto.setEndTime(event.getEndTime());
-        dto.setTargetAudience(event.getTargetAudience());
         dto.setSport(event.getSport());
         dto.setLocation(event.getLocation());
 
@@ -47,11 +46,18 @@ public class EventDTOMapper {
         dto.setLocationId(event.getLocation().getId());
         dto.setAvailablePlaces(event.getAvailablePlaces());
 
-        List<Long> participantIds = event.getUsers().stream()
-                .map(User::getId)
-                .collect(Collectors.toList());
-        dto.setParticipantIds(participantIds);
+        dto.setParticipants(event.getUsers().stream()
+                .map(this::toUserDto)
+                .collect(Collectors.toList()));
 
+
+        return dto;
+    }
+
+    private UserDTO toUserDto(User user) {
+        UserDTO dto = new UserDTO();
+        dto.setId(user.getId());
+        dto.setUserName(user.getUserName());
         return dto;
     }
 
@@ -63,7 +69,6 @@ public class EventDTOMapper {
         event.setEndDate(dto.getEndDate());
         event.setStartTime(dto.getStartTime());
         event.setEndTime(dto.getEndTime());
-        event.setTargetAudience(dto.getTargetAudience());
 
         Sport sport = sportRepository.findById(dto.getSport().getId())
                 .orElseThrow(() -> new RuntimeException("Sport with id " + dto.getSport().getId() + " does not exist"));
@@ -76,6 +81,8 @@ public class EventDTOMapper {
         return event;
     }
 
+
+
     public Event toEntityForUpdate(EventDto dto) {
         Event event = new Event();
         event.setId(dto.getId());
@@ -85,7 +92,6 @@ public class EventDTOMapper {
         event.setEndDate(dto.getEndDate());
         event.setStartTime(dto.getStartTime());
         event.setEndTime(dto.getEndTime());
-        event.setTargetAudience(dto.getTargetAudience());
 
         return event;
 

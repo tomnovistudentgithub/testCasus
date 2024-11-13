@@ -15,7 +15,7 @@ public class Price {
     @Enumerated(EnumType.STRING)
     private MembershipType membershipType;
 
-    private double basePrice;
+    private double price;
 
 
     public long getId() {
@@ -42,11 +42,11 @@ public class Price {
         this.membershipType = membershipType;
     }
 
-    public double getBasePrice() {
-        return basePrice;
+    public double getPrice() {
+        return price;
     }
 
-    public void setBasePrice(double basePrice) {
-        this.basePrice = basePrice;
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

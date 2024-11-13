@@ -45,8 +45,11 @@ public class MyUSCUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return  user.getId() + "::" + user.getUserName();
+        return  user.getUserName();
     }
+//    public String getUsername() {
+//        return  user.getId() + "::" + user.getUserName();
+//    }
 
     @Override
     public boolean isAccountNonExpired() {

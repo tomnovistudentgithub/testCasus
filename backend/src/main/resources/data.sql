@@ -25,7 +25,7 @@ insert into location (name, capacity) values ('Spinning Hall', 25);
 insert into location (name, capacity) values ('Sports hall', 40);
 --
 -- -- Insert sportevents
-insert into event (name, description, location_id, start_date, end_date, start_time, end_time, sport_id, target_audience, available_places)
-values ('Morning Yoga', 'A relaxing morning yoga session', (select id from location where name = 'Sports hall'), '2023-11-01', '2023-11-01', '08:00:00', '09:00:00', (select id from sport where name = 'Dancehall'), 'STUDENT', 20);
-insert into event (name, description, location_id, start_date, end_date, start_time, end_time, sport_id, target_audience, available_places)
-values ('Evening Spin', 'High-intensity spinning class', (select id from location where name = 'Spinning Hall'), '2023-11-01', '2023-11-01', '18:00:00', '19:00:00', (select id from sport where name = 'Spinning'), 'ASSOCIATION', 25);
+insert into event (name, description, location_id, start_date, end_date, start_time, end_time, sport_id, available_places)
+values ('Morning Yoga', 'A relaxing morning yoga session', (select id from location where name = 'Sports hall'), '2023-11-01', '2023-11-01', '08:00:00', '09:00:00', (select id from sport where name = 'Dancehall'), 20);
+insert into event (name, description, location_id, start_date, end_date, start_time, end_time, sport_id, available_places)
+values ('Evening Spin', 'High-intensity spinning class', (select id from location where name = 'Spinning Hall'), '2023-11-01', '2023-11-01', '18:00:00', '19:00:00', (select id from sport where name = 'Spinning'), 25);

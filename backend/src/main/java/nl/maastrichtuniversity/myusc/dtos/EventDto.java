@@ -2,8 +2,6 @@ package nl.maastrichtuniversity.myusc.dtos;
 
 import nl.maastrichtuniversity.myusc.model.Location;
 import nl.maastrichtuniversity.myusc.model.Sport;
-import nl.maastrichtuniversity.myusc.model.TargetAudience;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -18,11 +16,10 @@ public class EventDto {
     private LocalDate endDate;
     private LocalTime startTime;
     private LocalTime endTime;
-    private TargetAudience targetAudience;
     private Sport sport;
     private Location location;
     private int availablePlaces;
-    private List<Long> participantIds = new ArrayList<>();
+    private List<UserDTO> participants = new ArrayList<>();
 
     private Long sportId;
     private String sportName;
@@ -31,6 +28,13 @@ public class EventDto {
 
     //getters and setters
 
+    public List<UserDTO> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(List<UserDTO> participants) {
+        this.participants = participants;
+    }
 
     public String getSportName() {
         return sportName;
@@ -72,9 +76,7 @@ public class EventDto {
         this.id = id;
     }
 
-    public List<Long> getParticipantIds() {
-        return participantIds;
-    }
+
 
     public int getAvailablePlaces() {
         return availablePlaces;
@@ -82,10 +84,6 @@ public class EventDto {
 
     public void setAvailablePlaces(int availablePlaces) {
         this.availablePlaces = availablePlaces;
-    }
-
-    public void setParticipantIds(List<Long> participantIds) {
-        this.participantIds = participantIds;
     }
 
 
@@ -136,14 +134,6 @@ public class EventDto {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
-    }
-
-    public TargetAudience getTargetAudience() {
-        return targetAudience;
-    }
-
-    public void setTargetAudience(TargetAudience targetAudience) {
-        this.targetAudience = targetAudience;
     }
 
 

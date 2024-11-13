@@ -24,8 +24,7 @@ public class MembershipService {
 
 
     public Membership createMembership(MembershipDto membershipDto) {
-        membershipDto.setEnrollmentYear(2024);
-        membershipDto.setEnrollmentMonth(10);
+
 
 
         if (membershipDto == null) {
@@ -54,18 +53,7 @@ public class MembershipService {
             if (membershipDto.getMembershipType() == null) {
                 throw new IllegalArgumentException("Membership type is required");
             }
-            if (membershipDto.getEnrollmentYear() == 0) {
-                throw new IllegalArgumentException("Enrollment year is required");
-            }
-            if (membershipDto.getEnrollmentMonth() == 0) {
-                throw new IllegalArgumentException("Enrollment month is required");
-            }
-            if (membershipDto.getStartDate() == null) {
-                throw new IllegalArgumentException("Start date is required");
-            }
-            if (membershipDto.getExpirationDate() == null) {
-                throw new IllegalArgumentException("Expiration date is required");
-            }
+
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
@@ -75,15 +63,16 @@ public class MembershipService {
                 throw new IllegalArgumentException("User is already a member");
             }
 
+            LocalDate startDate = LocalDate.now();
+            LocalDate expirationDate = startDate.plusYears(1);
+
             Membership newMembership = new Membership();
             newMembership.setUser(user);
             newMembership.setMembershipType(membershipDto.getMembershipType());
-            newMembership.setEnrollmentYear(membershipDto.getEnrollmentYear());
-            newMembership.setEnrollmentMonth(membershipDto.getEnrollmentMonth());
-            newMembership.setPrice(priceService.setPrice(user, membershipDto.getMembershipType(), membershipDto.getEnrollmentMonth()));
-            newMembership.setStartDate(membershipDto.getStartDate());
-            newMembership.setExpirationDate(membershipDto.getExpirationDate());
-            newMembership.setActive(isActive(membershipDto.getStartDate(), membershipDto.getExpirationDate()));
+
+            newMembership.setPrice(priceService.calculatePrice(user, membershipDto.getMembershipType()));
+            newMembership.setStartDate(startDate);
+            newMembership.setExpirationDate(expirationDate);
             return membershipRepository.save(newMembership);
         }
         catch (IllegalArgumentException e) {

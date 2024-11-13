@@ -104,6 +104,7 @@ public class EventController {
                     .orElseThrow(() -> new RuntimeException("Event with id " + eventId + " does not exist"));
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new RuntimeException("User with id " + userId + " does not exist"));
+
             eventService.registerUser(event, user);
             EventDto updatedEvent = eventService.getEventDto(eventId);
             return ResponseEntity.ok(updatedEvent);
