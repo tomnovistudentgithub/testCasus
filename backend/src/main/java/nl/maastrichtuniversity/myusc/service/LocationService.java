@@ -2,7 +2,7 @@ package nl.maastrichtuniversity.myusc.service;
 
 
 import nl.maastrichtuniversity.myusc.model.Location;
-import nl.maastrichtuniversity.myusc.model.LocationDto;
+import nl.maastrichtuniversity.myusc.dtos.LocationDto;
 import nl.maastrichtuniversity.myusc.repository.LocationRepository;
 import org.springframework.stereotype.Service;
 

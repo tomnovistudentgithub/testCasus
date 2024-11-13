@@ -1,6 +1,8 @@
-package nl.maastrichtuniversity.myusc.model;
+package nl.maastrichtuniversity.myusc.dtos;
 
-public class UserDto {
+import nl.maastrichtuniversity.myusc.model.UserType;
+
+public class UserDTO {
     private String firstName;
     private String lastName;
     private String email;

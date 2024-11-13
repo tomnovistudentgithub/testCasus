@@ -1,11 +1,10 @@
 package nl.maastrichtuniversity.myusc.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import nl.maastrichtuniversity.myusc.entities.User;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 public class Membership {

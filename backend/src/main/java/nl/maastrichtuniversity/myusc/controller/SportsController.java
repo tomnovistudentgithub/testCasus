@@ -1,7 +1,7 @@
 package nl.maastrichtuniversity.myusc.controller;
 
 
-import nl.maastrichtuniversity.myusc.model.SportDto;
+import nl.maastrichtuniversity.myusc.dtos.SportDto;
 import nl.maastrichtuniversity.myusc.service.SportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

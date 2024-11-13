@@ -1,6 +1,4 @@
-package nl.maastrichtuniversity.myusc.model;
-
-import jakarta.persistence.Column;
+package nl.maastrichtuniversity.myusc.dtos;
 
 public class LocationDto {
 

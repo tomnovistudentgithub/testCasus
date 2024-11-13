@@ -1,5 +1,7 @@
 package nl.maastrichtuniversity.myusc.service;
 
+import nl.maastrichtuniversity.myusc.dtos.UserDTO;
+import nl.maastrichtuniversity.myusc.entities.User;
 import nl.maastrichtuniversity.myusc.model.*;
 import nl.maastrichtuniversity.myusc.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +21,7 @@ public class UserService {
     }
 
 
-    public User register(UserDto userDto) {
+    public User register(UserDTO userDto) {
 //        if (userDto.getUserType() == null) {
 //            throw new IllegalArgumentException("User type must not be null");
 //        }

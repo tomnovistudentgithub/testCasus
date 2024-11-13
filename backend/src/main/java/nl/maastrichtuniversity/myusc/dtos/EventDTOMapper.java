@@ -1,5 +1,9 @@
-package nl.maastrichtuniversity.myusc.model;
+package nl.maastrichtuniversity.myusc.dtos;
 
+import nl.maastrichtuniversity.myusc.entities.User;
+import nl.maastrichtuniversity.myusc.model.Event;
+import nl.maastrichtuniversity.myusc.model.Location;
+import nl.maastrichtuniversity.myusc.model.Sport;
 import nl.maastrichtuniversity.myusc.repository.LocationRepository;
 import nl.maastrichtuniversity.myusc.repository.SportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class EventMapper {
+public class EventDTOMapper {
 
 
 
@@ -17,7 +21,7 @@ public class EventMapper {
     private final LocationRepository locationRepository;
 
     @Autowired
-    public EventMapper(SportRepository sportRepository, LocationRepository locationRepository) {
+    public EventDTOMapper(SportRepository sportRepository, LocationRepository locationRepository) {
         this.sportRepository = sportRepository;
         this.locationRepository = locationRepository;
     }

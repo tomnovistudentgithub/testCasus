@@ -1,9 +1,9 @@
-package nl.maastrichtuniversity.myusc.model;
+package nl.maastrichtuniversity.myusc.entities;
 
 import com.fasterxml.jackson.annotation.*;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
-import org.springframework.lang.NonNull;
+import nl.maastrichtuniversity.myusc.model.*;
 
 import java.util.List;
 
@@ -22,12 +22,18 @@ import java.util.List;
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")
-public abstract class User {
+public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
     private Long id;
+
+    @Column(name = "user_name", unique = true, nullable = false)
+    private String userName;
+
+    @Column(name = "password", nullable = false)
+    private String password;
 
     @Column
     private String firstName;
@@ -38,21 +44,26 @@ public abstract class User {
     @Column(unique = true)
     private String email;
 
-    @Column
-    private String password;
-
-
     @Enumerated(EnumType.STRING)
     @Column(name = "user_type", insertable = false, updatable = false)
     @Nonnull
     private UserType userType;
 
+    private boolean isExpired = false;
+    @Column(nullable = false)
+    private boolean isLocked = false;
+    @Column(nullable = false)
+    private boolean areCredentialsExpired = false;
+    @Column(nullable = false)
+    private boolean isEnabled = true;
 
-    @Column
-    private int enrollmentYear;
-
-    @Column
-    private Integer enrollmentMonth;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private List<Role> roles;
 
     @ManyToMany(mappedBy = "users")
     private List<Event> events;
@@ -60,28 +71,60 @@ public abstract class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Membership> memberships;
 
-    protected User(UserType userType) {
-        this.userType = userType;
-    }
-
     public User() {
-
+        id = -1L;
     }
 
-    public int getEnrollmentYear() {
-        return enrollmentYear;
+    public User(Long id) {
+        this.id = id;
     }
 
-    public void setEnrollmentYear(int enrollmentYear) {
-        this.enrollmentYear = enrollmentYear;
+    public String getUserName() {
+        return userName;
     }
 
-    public Integer getEnrollmentMonth() {
-        return enrollmentMonth;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public void setEnrollmentMonth(Integer enrollmentMonth) {
-        this.enrollmentMonth = enrollmentMonth;
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+    public boolean isExpired() {
+        return isExpired;
+    }
+
+    public void setExpired(boolean expired) {
+        isExpired = expired;
+    }
+
+    public boolean isLocked() {
+        return isLocked;
+    }
+
+    public void setLocked(boolean locked) {
+        isLocked = locked;
+    }
+
+    public boolean areCredentialsExpired() {
+        return areCredentialsExpired;
+    }
+
+    public void setAreCredentialsExpired(boolean areCredentialsExpired) {
+        this.areCredentialsExpired = areCredentialsExpired;
+    }
+
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
     }
 
     public List<Event> getEvents() {

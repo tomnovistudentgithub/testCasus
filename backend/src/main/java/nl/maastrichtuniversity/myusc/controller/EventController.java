@@ -1,9 +1,9 @@
 package nl.maastrichtuniversity.myusc.controller;
 
 import nl.maastrichtuniversity.myusc.model.Event;
-import nl.maastrichtuniversity.myusc.model.EventDto;
-import nl.maastrichtuniversity.myusc.model.EventMapper;
-import nl.maastrichtuniversity.myusc.model.User;
+import nl.maastrichtuniversity.myusc.dtos.EventDto;
+import nl.maastrichtuniversity.myusc.dtos.EventDTOMapper;
+import nl.maastrichtuniversity.myusc.entities.User;
 import nl.maastrichtuniversity.myusc.repository.EventRepository;
 import nl.maastrichtuniversity.myusc.repository.LocationRepository;
 import nl.maastrichtuniversity.myusc.repository.SportRepository;
@@ -13,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import nl.maastrichtuniversity.myusc.model.Sport;
-import nl.maastrichtuniversity.myusc.model.Location;
 
 import java.util.List;
 
@@ -31,11 +29,11 @@ public class EventController {
     private final UserRepository userRepository;
     private final SportRepository sportRepository;
     private final LocationRepository locationRepository;
-    private final EventMapper eventMapper;
+    private final EventDTOMapper eventMapper;
 
 
     @Autowired
-    public EventController(EventService eventService, EventRepository eventRepository, UserRepository userRepository, SportRepository sportRepository, LocationRepository locationRepository, EventMapper eventMapper) {
+    public EventController(EventService eventService, EventRepository eventRepository, UserRepository userRepository, SportRepository sportRepository, LocationRepository locationRepository, EventDTOMapper eventMapper) {
         this.eventService = eventService;
         this.eventRepository = eventRepository;
         this.userRepository = userRepository;

@@ -1,7 +1,10 @@
-package nl.maastrichtuniversity.myusc.model;
+package nl.maastrichtuniversity.myusc.dtos;
+
+import nl.maastrichtuniversity.myusc.model.Location;
+import nl.maastrichtuniversity.myusc.model.Sport;
+import nl.maastrichtuniversity.myusc.model.TargetAudience;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;

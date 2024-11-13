@@ -1,4 +1,6 @@
-package nl.maastrichtuniversity.myusc.model;
+package nl.maastrichtuniversity.myusc.dtos;
+
+import nl.maastrichtuniversity.myusc.model.MembershipType;
 
 import java.time.LocalDate;
 

@@ -1,7 +1,7 @@
 package nl.maastrichtuniversity.myusc.repository;
 
 import nl.maastrichtuniversity.myusc.model.Membership;
-import nl.maastrichtuniversity.myusc.model.User;
+import nl.maastrichtuniversity.myusc.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
