@@ -32,8 +32,10 @@ public class SecurityConfig {
                         .requestMatchers("api/users/register").permitAll()
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/secure").authenticated()
+                        .requestMatchers("/secure/user").hasRole("ADMIN")
                         .requestMatchers("/secure/admin").hasRole("ADMIN")
                         .requestMatchers("/secure/user").hasRole("USER")
+
                         .anyRequest().denyAll()
                 )
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
