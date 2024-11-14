@@ -21,12 +21,6 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private String name;
-
-    @Column
-    private String description;
-
     @ManyToOne
     @JoinColumn(name="location_id")
     private Location location;
@@ -36,8 +30,6 @@ public class Event {
     private LocalTime startTime;
     private LocalTime endTime;
 
-    @Enumerated(EnumType.STRING)
-    private TargetAudience targetAudience;
 
     @ManyToOne
     @JoinColumn(name = "sport_id")
@@ -83,15 +75,6 @@ public class Event {
         this.sport = sport;
     }
 
-    public TargetAudience getTargetAudience() {
-        return targetAudience;
-    }
-
-
-
-    public void setTargetAudience(TargetAudience targetAudience) {
-        this.targetAudience = targetAudience;
-    }
     public Long getId() {
         return id;
     }
@@ -99,23 +82,6 @@ public class Event {
     public void setId(Long id) {
         this.id = id;
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
 
     public LocalDate getStartDate() {
         return startDate;

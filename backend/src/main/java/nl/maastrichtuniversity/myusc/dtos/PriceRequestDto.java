@@ -8,7 +8,7 @@ public class PriceRequestDto {
     private Long userId;
     private UserType userType;
     private MembershipType membershipType;
-    private int enrollmentMonth;
+
 
     public Long getUserId() {
         return userId;
@@ -30,11 +30,4 @@ public class PriceRequestDto {
         this.membershipType = membershipType;
     }
 
-    public int getEnrollmentMonth() {
-        return enrollmentMonth;
-    }
-
-    public void setEnrollmentMonth(int enrollmentMonth) {
-        this.enrollmentMonth = enrollmentMonth;
-    }
 }

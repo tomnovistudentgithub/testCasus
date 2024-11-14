@@ -24,9 +24,6 @@ public class MembershipService {
 
 
     public Membership createMembership(MembershipDto membershipDto) {
-        membershipDto.setEnrollmentYear(2024);
-        membershipDto.setEnrollmentMonth(10);
-
 
         if (membershipDto == null) {
             throw new IllegalArgumentException("MembershipDto is required");
@@ -35,9 +32,8 @@ public class MembershipService {
         if (userId == null) {
             throw new IllegalArgumentException("User ID is required");
         }
-        System.out.println("User id: " + userId);
-
         User user = null;
+
         try {
             user = userRepository.findById(userId)
                     .orElseThrow(() -> new IllegalArgumentException("User with id " + userId + " not found"));
@@ -46,7 +42,6 @@ public class MembershipService {
             System.out.println("Exception thrown by findById: " + cause);
         }
 
-
         try {
             if (user == null) {
                 throw new IllegalArgumentException("User is required");
@@ -54,36 +49,26 @@ public class MembershipService {
             if (membershipDto.getMembershipType() == null) {
                 throw new IllegalArgumentException("Membership type is required");
             }
-            if (membershipDto.getEnrollmentYear() == 0) {
-                throw new IllegalArgumentException("Enrollment year is required");
-            }
-            if (membershipDto.getEnrollmentMonth() == 0) {
-                throw new IllegalArgumentException("Enrollment month is required");
-            }
-            if (membershipDto.getStartDate() == null) {
-                throw new IllegalArgumentException("Start date is required");
-            }
-            if (membershipDto.getExpirationDate() == null) {
-                throw new IllegalArgumentException("Expiration date is required");
-            }
+
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
 
         try {
-            if (isUserAlreadyMember(user)) {
-                throw new IllegalArgumentException("User is already a member");
+            if (isUserAlreadyActiveMember(user)) {
+                throw new IllegalArgumentException("User is already an active member, cannot have multiple active memberships");
             }
+
+            LocalDate startDate = LocalDate.now();
+            LocalDate expirationDate = startDate.plusYears(1);
 
             Membership newMembership = new Membership();
             newMembership.setUser(user);
             newMembership.setMembershipType(membershipDto.getMembershipType());
-            newMembership.setEnrollmentYear(membershipDto.getEnrollmentYear());
-            newMembership.setEnrollmentMonth(membershipDto.getEnrollmentMonth());
-            newMembership.setPrice(priceService.setPrice(user, membershipDto.getMembershipType(), membershipDto.getEnrollmentMonth()));
-            newMembership.setStartDate(membershipDto.getStartDate());
-            newMembership.setExpirationDate(membershipDto.getExpirationDate());
-            newMembership.setActive(isActive(membershipDto.getStartDate(), membershipDto.getExpirationDate()));
+
+            newMembership.setPrice(priceService.calculatePrice(user, membershipDto.getMembershipType()));
+            newMembership.setStartDate(startDate);
+            newMembership.setExpirationDate(expirationDate);
             return membershipRepository.save(newMembership);
         }
         catch (IllegalArgumentException e) {
@@ -91,17 +76,35 @@ public class MembershipService {
         }
     }
 
-    public Boolean isUserAlreadyMember(User user) {
-        return membershipRepository.findByUser(user).isPresent();
+    public Boolean isUserAlreadyActiveMember(User user) {
+        return membershipRepository.findByUser(user)
+                .stream()
+                .anyMatch(membership -> isActive(membership.getStartDate(), membership.getExpirationDate()));
     }
 
     public Boolean isActive(LocalDate startDate, LocalDate expirationDate) {
         LocalDate now = LocalDate.now();
-        return now.isAfter(startDate) && now.isBefore(expirationDate);
+        return (now.isEqual(startDate) || now.isAfter(startDate)) && now.isBefore(expirationDate);
 
     }
 
 
+    public void deleteMembership(Long membershipId, Long userId) {
 
+        if (membershipId == null || userId == null) {
+            throw new IllegalArgumentException("Membership ID and User ID is required");
+        }
+
+
+
+        Membership membership = membershipRepository.findById(membershipId)
+                .orElseThrow(() -> new IllegalArgumentException("Membership with id " + membershipId + " not found"));
+
+        if (membership.getUser().getId() != userId) {
+            throw new IllegalArgumentException("Membership does not belong to selected user");
+        }
+
+                membershipRepository.deleteById(membershipId);
+    }
 
 }

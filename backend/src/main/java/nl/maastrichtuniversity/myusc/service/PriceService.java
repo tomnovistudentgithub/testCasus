@@ -21,7 +21,7 @@ public class PriceService {
 
     }
 
-    public double setPrice(User user, MembershipType membershipType, int enrollmentMonth) {
+    public double calculatePrice(User user, MembershipType membershipType) {
 
         double basePrice = 0.0;
         double originalBasePrice = 0.0;
@@ -40,14 +40,7 @@ public class PriceService {
                 break;
         }
 
-        if (enrollmentMonth >= 9 && enrollmentMonth <= 12) {
-            basePrice = originalBasePrice - (originalBasePrice / 10.0) * (enrollmentMonth - 9);
-        } else if (enrollmentMonth >= 1 && enrollmentMonth <= 6) {
-            basePrice = originalBasePrice - (originalBasePrice / 10.0) * (enrollmentMonth + 3);
-        } else if (enrollmentMonth >= 7 && enrollmentMonth <= 8) {
-        basePrice = (originalBasePrice - (originalBasePrice / 10.0) * 9) * 0.7;
-    }
-
+        basePrice = originalBasePrice;
         if (userType == UserType.STUDENT) {
             basePrice *= 0.8;
         }
@@ -56,7 +49,7 @@ public class PriceService {
         Price price = new Price();
         price.setUserType(userType);
         price.setMembershipType(membershipType);
-        price.setBasePrice(basePrice);
+        price.setPrice(basePrice);
         priceRepository.save(price);
 
         return basePrice;

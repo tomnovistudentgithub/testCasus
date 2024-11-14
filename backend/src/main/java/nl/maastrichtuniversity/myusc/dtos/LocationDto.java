@@ -5,7 +5,6 @@ public class LocationDto {
 
     private Long id;
     private String name;
-    private String buildingSection;
     private int capacity;
 
 
@@ -23,14 +22,6 @@ public class LocationDto {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getBuildingSection() {
-        return buildingSection;
-    }
-
-    public void setBuildingSection(String buildingSection) {
-        this.buildingSection = buildingSection;
     }
 
     public int getCapacity() {

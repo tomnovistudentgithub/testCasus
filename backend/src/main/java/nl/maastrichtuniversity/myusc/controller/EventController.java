@@ -67,10 +67,10 @@ public class EventController {
         }
     }
 
-    @PostMapping(value = "/addEvent", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> addEvent(@RequestBody EventDto eventDto) {
+    @PostMapping(value = "/createEvent", consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> createEvent(@RequestBody EventDto eventDto) {
         try {
-            EventDto savedEventDto = eventService.addEvent(eventDto);
+            EventDto savedEventDto = eventService.createEvent(eventDto);
             return ResponseEntity.ok(savedEventDto);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -104,6 +104,7 @@ public class EventController {
                     .orElseThrow(() -> new RuntimeException("Event with id " + eventId + " does not exist"));
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new RuntimeException("User with id " + userId + " does not exist"));
+
             eventService.registerUser(event, user);
             EventDto updatedEvent = eventService.getEventDto(eventId);
             return ResponseEntity.ok(updatedEvent);

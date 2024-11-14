@@ -4,6 +4,7 @@ import nl.maastrichtuniversity.myusc.dtos.EventDto;
 import nl.maastrichtuniversity.myusc.entities.User;
 import nl.maastrichtuniversity.myusc.dtos.EventDTOMapper;
 import nl.maastrichtuniversity.myusc.model.Event;
+import nl.maastrichtuniversity.myusc.model.Sport;
 import nl.maastrichtuniversity.myusc.repository.EventRepository;
 import nl.maastrichtuniversity.myusc.repository.LocationRepository;
 import nl.maastrichtuniversity.myusc.repository.SportRepository;
@@ -11,6 +12,8 @@ import nl.maastrichtuniversity.myusc.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,11 +41,22 @@ public class EventService {
         return eventMapper.toDto(event);
     }
 
-    public EventDto addEvent(EventDto eventDto) {
+    public EventDto createEvent(EventDto eventDto) {
         Event event = eventMapper.toEntityForCreate(eventDto);
 
-        List<User> users = eventDto.getParticipantIds().stream()
-                .map(id -> userRepository.findById(id).orElseThrow(() -> new RuntimeException("User with id " + id + " does not exist")))
+        Long sportId = event.getSport().getId();
+        LocalDate startDate = event.getStartDate();
+        LocalTime startTime = event.getStartTime();
+        if (eventRepository.findBySportIdAndStartDateAndStartTime(sportId, startDate, startTime).isPresent()) {
+            throw new RuntimeException("An event with the same sport already exists at the same date and time.");
+        }
+
+        Sport sport = sportRepository.findById(sportId)
+                .orElseThrow(() -> new RuntimeException("Sport with id " + sportId + " does not exist"));
+        event.setSport(sport);
+
+        List<User> users = eventDto.getParticipants().stream()
+                .map(userDTO -> userRepository.findById(userDTO.getId()).orElseThrow(() -> new RuntimeException("User with id " + userDTO.getId() + " does not exist")))
                 .collect(Collectors.toList());
         event.setUsers(users);
 
@@ -55,6 +69,10 @@ public class EventService {
 
 
     public void registerUser(Event event, User user) {
+        if (event.getUsers().contains(user)) {
+            throw new RuntimeException("User is already registered for this event.");
+        }
+
         if (event.getUsers().size() < event.getLocation().getCapacity()) {
             event.getUsers().add(user);
             event.setAvailablePlaces(event.getAvailablePlaces() - 1);
