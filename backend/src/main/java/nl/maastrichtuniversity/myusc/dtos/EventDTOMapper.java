@@ -15,8 +15,6 @@ import java.util.stream.Collectors;
 @Component
 public class EventDTOMapper {
 
-
-
     private final SportRepository sportRepository;
     private final LocationRepository locationRepository;
 
@@ -30,8 +28,6 @@ public class EventDTOMapper {
         EventDto dto = new EventDto();
 
         dto.setId(event.getId());
-        dto.setName(event.getName());
-        dto.setDescription(event.getDescription());
         dto.setStartDate(event.getStartDate());
         dto.setEndDate(event.getEndDate());
         dto.setStartTime(event.getStartTime());
@@ -41,6 +37,7 @@ public class EventDTOMapper {
 
 
         dto.setSportName(event.getSport().getName());
+        dto.setSportDescription(event.getSport().getDescription());
         dto.setSportId(event.getSport().getId());
         dto.setLocationName(event.getLocation().getName());
         dto.setLocationId(event.getLocation().getId());
@@ -63,8 +60,6 @@ public class EventDTOMapper {
 
     public Event toEntityForCreate(EventDto dto) {
         Event event = new Event();
-        event.setName(dto.getName());
-        event.setDescription(dto.getDescription());
         event.setStartDate(dto.getStartDate());
         event.setEndDate(dto.getEndDate());
         event.setStartTime(dto.getStartTime());
@@ -83,17 +78,5 @@ public class EventDTOMapper {
 
 
 
-    public Event toEntityForUpdate(EventDto dto) {
-        Event event = new Event();
-        event.setId(dto.getId());
-        event.setName(dto.getName());
-        event.setDescription(dto.getDescription());
-        event.setStartDate(dto.getStartDate());
-        event.setEndDate(dto.getEndDate());
-        event.setStartTime(dto.getStartTime());
-        event.setEndTime(dto.getEndTime());
 
-        return event;
-
-    }
 }

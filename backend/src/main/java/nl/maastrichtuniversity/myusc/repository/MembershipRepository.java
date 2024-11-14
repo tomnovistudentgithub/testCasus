@@ -10,5 +10,6 @@ import java.util.Optional;
 @Repository
 public interface MembershipRepository extends JpaRepository<Membership, Long> {
     Optional<Membership> findByUser(User user);
+    void deleteById(Long id);
 
 }

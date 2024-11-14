@@ -30,11 +30,16 @@ public class MembershipController {
        } catch (RuntimeException e){
            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
          }
-
-
-
-
     }
 
+    @DeleteMapping("/delete/{membershipId}/user/{userId}")
+    public ResponseEntity<?> deleteMembership(@PathVariable Long membershipId, Long userId) {
+        try {
+            membershipService.deleteMembership(membershipId, userId);
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 
 }

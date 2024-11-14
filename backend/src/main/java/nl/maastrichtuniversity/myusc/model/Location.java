@@ -46,14 +46,6 @@ public class Location {
         this.name = name;
     }
 
-    public String getBuildingSection() {
-        return buildingSection;
-    }
-
-    public void setBuildingSection(String buildingSection) {
-        this.buildingSection = buildingSection;
-    }
-
     public int getCapacity() {
         return capacity;
     }

@@ -36,6 +36,11 @@ public class MyUSCUserDetailsService implements UserDetailsService {
 
     @Transactional
     public boolean createUser(UserModel userModel, List<String> roles) {
+
+        if (userRepository.findByUserName(userModel.getUserName()).isPresent()) {
+            throw new IllegalArgumentException("User already exists");
+        }
+
         var validRoles = roleRepository.findByRoleNameIn(roles);
 
         var user = userMapper.toEntity(userModel);

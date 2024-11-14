@@ -21,12 +21,6 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private String name;
-
-    @Column
-    private String description;
-
     @ManyToOne
     @JoinColumn(name="location_id")
     private Location location;
@@ -88,23 +82,6 @@ public class Event {
     public void setId(Long id) {
         this.id = id;
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
 
     public LocalDate getStartDate() {
         return startDate;

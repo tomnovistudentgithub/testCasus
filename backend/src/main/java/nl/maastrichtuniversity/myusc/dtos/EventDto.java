@@ -10,8 +10,6 @@ import java.util.List;
 public class EventDto {
 
     private Long id;
-    private String name;
-    private String description;
     private LocalDate startDate;
     private LocalDate endDate;
     private LocalTime startTime;
@@ -23,6 +21,7 @@ public class EventDto {
 
     private Long sportId;
     private String sportName;
+    private String sportDescription;
     private Long locationId;
     private String locationName;
 
@@ -42,6 +41,15 @@ public class EventDto {
 
     public void setSportName(String sportName) {
         this.sportName = sportName;
+    }
+
+
+    public String getSportDescription() {
+        return sportDescription;
+    }
+
+    public void setSportDescription(String sportDescription) {
+        this.sportDescription = sportDescription;
     }
 
     public String getLocationName() {
@@ -85,24 +93,6 @@ public class EventDto {
     public void setAvailablePlaces(int availablePlaces) {
         this.availablePlaces = availablePlaces;
     }
-
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
 
     public LocalDate getStartDate() {
         return startDate;

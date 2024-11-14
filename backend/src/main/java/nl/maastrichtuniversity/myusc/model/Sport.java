@@ -19,6 +19,10 @@ public class Sport {
     @Column
     private String name;
 
+    @Column
+    private String description;
+
+
     @Enumerated(EnumType.STRING)
     private SportType sportType;
 
@@ -41,6 +45,15 @@ public class Sport {
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
 
 
     public SportType getSportType() {

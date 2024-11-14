@@ -25,8 +25,6 @@ public class MembershipService {
 
     public Membership createMembership(MembershipDto membershipDto) {
 
-
-
         if (membershipDto == null) {
             throw new IllegalArgumentException("MembershipDto is required");
         }
@@ -91,6 +89,22 @@ public class MembershipService {
     }
 
 
+    public void deleteMembership(Long membershipId, Long userId) {
 
+        if (membershipId == null || userId == null) {
+            throw new IllegalArgumentException("Membership ID and User ID is required");
+        }
+
+
+
+        Membership membership = membershipRepository.findById(membershipId)
+                .orElseThrow(() -> new IllegalArgumentException("Membership with id " + membershipId + " not found"));
+
+        if (membership.getUser().getId() != userId) {
+            throw new IllegalArgumentException("Membership does not belong to selected user");
+        }
+
+                membershipRepository.deleteById(membershipId);
+    }
 
 }
