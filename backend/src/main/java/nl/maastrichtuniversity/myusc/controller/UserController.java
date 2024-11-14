@@ -11,9 +11,15 @@ import nl.maastrichtuniversity.myusc.model.*;
 import nl.maastrichtuniversity.myusc.service.MyUSCUserDetailsService;
 import nl.maastrichtuniversity.myusc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 import static com.mysql.cj.conf.PropertyKey.logger;
 
@@ -56,34 +62,6 @@ public class UserController {
     }
 
 
-//        TODO cleanup
-
-//    after implementing to spring security is obsolete --> AuthController handles the login and the above the registration
-//@PostMapping("/register")
-//    public ResponseEntity<?> register(@RequestBody UserDTO userDto) {
-//        try {
-//            User user = userService.register(userDto);
-//            return ResponseEntity.ok(user);
-//        } catch (RuntimeException e) {
-//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-//        }
-//    }
-//
-//        @PostMapping("/login")
-//        public ResponseEntity<?> login(@RequestBody UserDto userDto) {
-//            try {
-//                User loggedInUser = userService.login(userDto.getEmail(), userDto.getPassword());
-//
-//                if (loggedInUser != null) {
-//                    return ResponseEntity.ok(loggedInUser);
-//                } else {
-//                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not authorized to login, please correct your credentials.");
-//                }
-//            } catch (RuntimeException e) {
-//                return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-//            }
-//    }
-
     @PutMapping("/updateUserType/{id}")
     public ResponseEntity<User> updateUserType(@PathVariable Long id, @RequestBody UserType newUserType) {
         User user = userService.getUser(id);
@@ -95,6 +73,64 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
 
+    @PostMapping("/uploadPicture")
+    public ResponseEntity<?> uploadPicture(@RequestParam("file") MultipartFile file) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userService.getUserByUserName(username);
 
+        if (user == null) {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+
+        long maxFileSize = 2 * 1024 * 1024;
+        if (file.getSize() > maxFileSize) {
+            return new ResponseEntity<>("File size exceeds the limit of 2MB", HttpStatus.BAD_REQUEST);
+        }
+
+        String contentType = file.getContentType();
+        if (!"image/jpeg".equals(contentType) && !"image/png".equals(contentType)) {
+            return new ResponseEntity<>("Only JPEG and PNG formats are allowed", HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            userService.saveUserPicture(user.getId(), file);
+            return ResponseEntity.ok().build();
+        } catch (IOException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/downloadPicture")
+    public ResponseEntity<byte[]> downloadPicture() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userService.getUserByUserName(username);
+
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        byte[] picture = userService.getUserPicture(user.getId());
+        if (picture == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);
+        headers.setContentDispositionFormData("attachment", "picture.jpg");
+
+        return new ResponseEntity<>(picture, headers, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deletePicture/{id}")
+    public ResponseEntity<?> deletePicture(@PathVariable Long id) {
+        User user = userService.getUser(id);
+
+        if (user == null) {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+
+        userService.deleteUserPicture(id);
+        return ResponseEntity.ok().build();
+    }
 
 }
