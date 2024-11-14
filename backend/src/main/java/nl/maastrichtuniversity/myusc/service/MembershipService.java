@@ -32,9 +32,8 @@ public class MembershipService {
         if (userId == null) {
             throw new IllegalArgumentException("User ID is required");
         }
-        System.out.println("User id: " + userId);
-
         User user = null;
+
         try {
             user = userRepository.findById(userId)
                     .orElseThrow(() -> new IllegalArgumentException("User with id " + userId + " not found"));
@@ -42,7 +41,6 @@ public class MembershipService {
             Throwable cause = e.getCause();
             System.out.println("Exception thrown by findById: " + cause);
         }
-
 
         try {
             if (user == null) {
@@ -57,8 +55,8 @@ public class MembershipService {
         }
 
         try {
-            if (isUserAlreadyMember(user)) {
-                throw new IllegalArgumentException("User is already a member");
+            if (isUserAlreadyActiveMember(user)) {
+                throw new IllegalArgumentException("User is already an active member, cannot have multiple active memberships");
             }
 
             LocalDate startDate = LocalDate.now();
@@ -78,13 +76,15 @@ public class MembershipService {
         }
     }
 
-    public Boolean isUserAlreadyMember(User user) {
-        return membershipRepository.findByUser(user).isPresent();
+    public Boolean isUserAlreadyActiveMember(User user) {
+        return membershipRepository.findByUser(user)
+                .stream()
+                .anyMatch(membership -> isActive(membership.getStartDate(), membership.getExpirationDate()));
     }
 
     public Boolean isActive(LocalDate startDate, LocalDate expirationDate) {
         LocalDate now = LocalDate.now();
-        return now.isAfter(startDate) && now.isBefore(expirationDate);
+        return (now.isEqual(startDate) || now.isAfter(startDate)) && now.isBefore(expirationDate);
 
     }
 

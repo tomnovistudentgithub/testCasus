@@ -33,7 +33,7 @@ public class MembershipController {
     }
 
     @DeleteMapping("/delete/{membershipId}/user/{userId}")
-    public ResponseEntity<?> deleteMembership(@PathVariable Long membershipId, Long userId) {
+    public ResponseEntity<?> deleteMembership(@PathVariable Long membershipId, @PathVariable Long userId) {
         try {
             membershipService.deleteMembership(membershipId, userId);
             return ResponseEntity.ok().build();
