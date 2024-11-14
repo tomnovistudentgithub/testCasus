@@ -39,6 +39,10 @@ public class User {
     @Column(unique = true)
     private String email;
 
+    @Lob
+    private byte[] picture;
+
+
     @Enumerated(EnumType.STRING)
     @Column(name = "user_type", insertable = false, updatable = false)
     @Nonnull
@@ -80,6 +84,14 @@ public class User {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public byte[] getPicture() {
+        return picture;
+    }
+
+    public void setPicture(byte[] picture) {
+        this.picture = picture;
     }
 
     public List<Role> getRoles() {
