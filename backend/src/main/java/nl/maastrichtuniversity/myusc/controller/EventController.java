@@ -87,8 +87,8 @@ public class EventController {
         }
     }
 
-    @PostMapping("/{eventId}/register/{userId}")
-    public ResponseEntity<?> registerUser(@PathVariable("eventId") Long eventId, @PathVariable("userId") Long userId) {
+    @PostMapping("/register/{eventId}")
+    public ResponseEntity<?> registerUser(@PathVariable("eventId") Long eventId) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String authenticatedUsername = authentication.getName();
@@ -96,16 +96,10 @@ public class EventController {
             User authenticatedUser = userRepository.findByUserName(authenticatedUsername)
                     .orElseThrow(() -> new RuntimeException("Authenticated user not found"));
 
-            if (!authenticatedUser.getId().equals(userId)) {
-                return new ResponseEntity<>("You can only register for events for yourself", HttpStatus.FORBIDDEN);
-            }
-
-            Event event = eventRepository.findEventById(eventId)
+                      Event event = eventRepository.findEventById(eventId)
                     .orElseThrow(() -> new RuntimeException("Event with id " + eventId + " does not exist"));
-            User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new RuntimeException("User with id " + userId + " does not exist"));
 
-            eventService.registerUser(event, user);
+                      eventService.registerUser(event, authenticatedUser);
             EventDto updatedEvent = eventService.getEventDto(eventId);
             return ResponseEntity.ok(updatedEvent);
         } catch (RuntimeException e) {
@@ -113,14 +107,19 @@ public class EventController {
         }
     }
 
-    @DeleteMapping("/{eventId}/deregister/{userId}")
-    public ResponseEntity<?> deregisterUser(@PathVariable("eventId") Long eventId, @PathVariable("userId") Long userId) {
+    @DeleteMapping("/deregister/{eventId}")
+    public ResponseEntity<?> deregisterUser(@PathVariable("eventId") Long eventId) {
         try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String authenticatedUsername = authentication.getName();
+
+            User authenticatedUser = userRepository.findByUserName(authenticatedUsername)
+                    .orElseThrow(() -> new RuntimeException("Authenticated user not found"));
+
             Event event = eventRepository.findEventById(eventId)
                     .orElseThrow(() -> new RuntimeException("Event with id " + eventId + " does not exist"));
-            User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new RuntimeException("User with id " + userId + " does not exist"));
-            eventService.deregisterUser(event, user);
+
+            eventService.deregisterUser(event, authenticatedUser);
             EventDto updatedEvent = eventService.getEventDto(eventId);
             return ResponseEntity.ok(updatedEvent);
         } catch (RuntimeException e) {

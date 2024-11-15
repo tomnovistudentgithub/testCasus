@@ -29,8 +29,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/api/users/register").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/events/{eventId}/register/{userId}").hasRole("USER")
-                        .requestMatchers(HttpMethod.POST, "/api/events/{eventId}/deregister/{userId}").hasRole("USER")
+                        .requestMatchers(HttpMethod.POST, "/api/events/register/*").hasRole("USER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/events/deregister/*").hasRole("USER")
                         .requestMatchers(HttpMethod.GET, "/api/events/**").authenticated()
                         .requestMatchers(HttpMethod.POST,  "/api/events/**").hasAnyRole("PLANNER", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE,  "/api/events/**").hasRole("PLANNER")
