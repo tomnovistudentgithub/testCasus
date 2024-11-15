@@ -23,8 +23,6 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-
-
     public User getUser(Long id) {
         return userRepository.findById(id).orElse(null);
     }
@@ -33,12 +31,11 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public void saveUserPicture(Long userId, MultipartFile file) throws IOException {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User with id " + userId + " not found"));
-        user.setPicture(file.getBytes());
-        userRepository.save(user);
+    public User getUserById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User with id " + id + " not found"));
     }
+
     @Transactional(readOnly = true)
     public User getUserByUserName(String username) {
         return userRepository.findByUserName(username)
@@ -47,16 +44,18 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public byte[] getUserPicture(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User with id " + userId + " not found"));
+        User user = getUserById(userId);
         return user.getPicture();
     }
 
-
+    public void saveUserPicture(Long userId, MultipartFile file) throws IOException {
+        User user = getUserById(userId);
+        user.setPicture(file.getBytes());
+        userRepository.save(user);
+    }
 
     public void deleteUserPicture(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User with id " + userId + " not found"));
+        User user = getUserById(userId);
         user.setPicture(null);
         userRepository.save(user);
     }

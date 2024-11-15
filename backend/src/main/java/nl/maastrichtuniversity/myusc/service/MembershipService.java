@@ -83,6 +83,10 @@ public class MembershipService {
     }
 
     public Boolean isActive(LocalDate startDate, LocalDate expirationDate) {
+        if (startDate == null || expirationDate == null) {
+            return false;
+        }
+
         LocalDate now = LocalDate.now();
         return (now.isEqual(startDate) || now.isAfter(startDate)) && now.isBefore(expirationDate);
 

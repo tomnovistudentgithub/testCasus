@@ -10,6 +10,13 @@ public class SportDto {
 
     private SportType sportType;
 
+    public SportDto(String basketball, String aTeamSport, SportType sportType) {
+    }
+
+    public SportDto() {
+
+    }
+
     public Long getId() {
         return id;
     }
