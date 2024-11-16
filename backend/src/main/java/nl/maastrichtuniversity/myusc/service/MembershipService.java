@@ -3,6 +3,8 @@ package nl.maastrichtuniversity.myusc.service;
 import nl.maastrichtuniversity.myusc.model.Membership;
 import nl.maastrichtuniversity.myusc.dtos.MembershipDto;
 import nl.maastrichtuniversity.myusc.entities.User;
+import nl.maastrichtuniversity.myusc.model.MembershipType;
+import nl.maastrichtuniversity.myusc.model.SportType;
 import nl.maastrichtuniversity.myusc.repository.MembershipRepository;
 import nl.maastrichtuniversity.myusc.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -110,5 +112,18 @@ public class MembershipService {
 
                 membershipRepository.deleteById(membershipId);
     }
+
+    public boolean hasActiveMembership(Long userId, SportType sportType) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User with id " + userId + " not found"));
+
+        return membershipRepository.findByUser(user).stream()
+                .anyMatch(membership ->
+                        (membership.getMembershipType() == MembershipType.GYM_AND_SPORTS ||
+                                membership.getMembershipType() == MembershipType.GYM && sportType == SportType.GYM ||
+                                membership.getMembershipType() == MembershipType.SPORTS && sportType == SportType.SPORTS) &&
+                                isActive(membership.getStartDate(), membership.getExpirationDate()));
+    }
+
 
 }

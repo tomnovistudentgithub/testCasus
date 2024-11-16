@@ -19,11 +19,6 @@ public class EventDto {
     private int availablePlaces;
     private List<UserDTO> participants = new ArrayList<>();
 
-    private Long sportId;
-    private String sportName;
-    private String sportDescription;
-    private Long locationId;
-    private String locationName;
 
     //getters and setters
 
@@ -33,47 +28,6 @@ public class EventDto {
 
     public void setParticipants(List<UserDTO> participants) {
         this.participants = participants;
-    }
-
-    public String getSportName() {
-        return sportName;
-    }
-
-    public void setSportName(String sportName) {
-        this.sportName = sportName;
-    }
-
-
-    public String getSportDescription() {
-        return sportDescription;
-    }
-
-    public void setSportDescription(String sportDescription) {
-        this.sportDescription = sportDescription;
-    }
-
-    public String getLocationName() {
-        return locationName;
-    }
-
-    public void setLocationName(String locationName) {
-        this.locationName = locationName;
-    }
-
-        public Long getSportId() {
-        return sportId;
-    }
-
-    public void setSportId(Long sportId) {
-        this.sportId = sportId;
-    }
-
-    public Long getLocationId() {
-        return locationId;
-    }
-
-    public void setLocationId(Long locationId) {
-        this.locationId = locationId;
     }
 
     public Long getId() {

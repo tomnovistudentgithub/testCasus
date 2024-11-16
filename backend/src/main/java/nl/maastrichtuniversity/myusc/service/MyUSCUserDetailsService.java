@@ -37,20 +37,27 @@ public class MyUSCUserDetailsService implements UserDetailsService {
     @Transactional
     public boolean createUser(UserModel userModel, List<String> roles) {
 
-        if (userRepository.findByUserName(userModel.getUserName()).isPresent()) {
-            throw new IllegalArgumentException("User already exists");
-        }
-
+        validateUserDoesNotExist(userModel.getUserName());
         var validRoles = roleRepository.findByRoleNameIn(roles);
-
         var user = userMapper.toEntity(userModel);
-        for (Role role: validRoles ) {
-            user.getRoles().add(role);
-        }
+        addRolesToUser(user, validRoles);
+
         updateRolesWithUser(user);
         var savedUser = userRepository.save(user);
         userModel.setId(savedUser.getId());
         return savedUser != null;
+    }
+
+    private void validateUserDoesNotExist(String userName) {
+        if (userRepository.findByUserName(userName).isPresent()) {
+            throw new IllegalArgumentException("User already exists");
+        }
+    }
+
+    private void addRolesToUser(User user, List<Role> roles) {
+        for (Role role : roles) {
+            user.getRoles().add(role);
+        }
     }
 
     private void updateRolesWithUser(User user) {
@@ -93,7 +100,7 @@ public class MyUSCUserDetailsService implements UserDetailsService {
     public boolean updatePassword(UserModel userModel) {
         Optional<User> user = userRepository.findById(userModel.getId());
         if (user.isEmpty()) { throw new UsernameNotFoundException(userModel.getId().toString());}
-        // convert to entity to get the encode password
+
         var update_user = userMapper.toEntity(userModel);
         var entity = user.get();
         entity.setPassword(update_user.getPassword());

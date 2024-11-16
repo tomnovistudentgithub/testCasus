@@ -22,64 +22,86 @@ public class EventService {
 
     private final EventRepository eventRepository;
     private final SportRepository sportRepository;
-    private final LocationRepository locationRepository;
     private final UserRepository userRepository;
     private final EventDTOMapper eventMapper;
+    private final MembershipService membershipService;
 
     @Autowired
-    public EventService(EventRepository eventRepository, SportRepository sportRepository, LocationRepository locationRepository, UserRepository userRepository, EventDTOMapper eventMapper) {
+    public EventService(EventRepository eventRepository, SportRepository sportRepository, LocationRepository locationRepository, UserRepository userRepository, EventDTOMapper eventMapper, MembershipService membershipService) {
         this.eventRepository = eventRepository;
         this.sportRepository = sportRepository;
-        this.locationRepository = locationRepository;
         this.userRepository = userRepository;
         this.eventMapper = eventMapper;
+        this.membershipService = membershipService;
     }
 
     public EventDto getEventDto(Long eventId) {
-        Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new RuntimeException("Event with id " + eventId + " does not exist"));
+        Event event = findEventById(eventId);
         return eventMapper.toDto(event);
     }
 
+    private Event findEventById(Long eventId) {
+        return eventRepository.findById(eventId)
+                .orElseThrow(() -> new RuntimeException("Event with id " + eventId + " does not exist"));
+    }
+
+
     public EventDto createEvent(EventDto eventDto) {
         Event event = eventMapper.toEntityForCreate(eventDto);
+        validateEvent(event);
+        setEventDetails(event, eventDto);
+        Event savedEvent = eventRepository.save(event);
+        return eventMapper.toDto(savedEvent);
+    }
 
+    private void validateEvent(Event event) {
         Long sportId = event.getSport().getId();
         LocalDate startDate = event.getStartDate();
         LocalTime startTime = event.getStartTime();
         if (eventRepository.findBySportIdAndStartDateAndStartTime(sportId, startDate, startTime).isPresent()) {
             throw new RuntimeException("An event with the same sport already exists at the same date and time.");
         }
+    }
 
-        Sport sport = sportRepository.findById(sportId)
-                .orElseThrow(() -> new RuntimeException("Sport with id " + sportId + " does not exist"));
+    private void setEventDetails(Event event, EventDto eventDto) {
+        Sport sport = sportRepository.findById(event.getSport().getId())
+                .orElseThrow(() -> new RuntimeException("Sport with id " + event.getSport().getId() + " does not exist"));
         event.setSport(sport);
 
         List<User> users = eventDto.getParticipants().stream()
                 .map(userDTO -> userRepository.findById(userDTO.getId()).orElseThrow(() -> new RuntimeException("User with id " + userDTO.getId() + " does not exist")))
                 .collect(Collectors.toList());
         event.setUsers(users);
-
-        Event savedEvent = eventRepository.save(event);
-        return eventMapper.toDto(savedEvent);
     }
+
     public void deleteEvent(Long id) {
         eventRepository.deleteById(id);
     }
 
 
-    public void registerUser(Event event, User user) {
+    private void validateUserRegistration(Event event, User user) {
         if (event.getUsers().contains(user)) {
             throw new RuntimeException("User is already registered for this event.");
         }
 
-        if (event.getUsers().size() < event.getLocation().getCapacity()) {
-            event.getUsers().add(user);
-            event.setAvailablePlaces(event.getAvailablePlaces() - 1);
-            eventRepository.save(event);
-        } else {
+        if (!hasActiveMembershipForSport(user, event.getSport())) {
+            throw new RuntimeException("User does not have an active membership for the sport.");
+        }
+
+        if (event.getUsers().size() >= event.getLocation().getCapacity()) {
             throw new RuntimeException("The event is full.");
         }
+    }
+
+    public void addUserToEvent(Event event, User user) {
+        validateUserRegistration(event, user);
+        event.getUsers().add(user);
+        event.setAvailablePlaces(event.getAvailablePlaces() - 1);
+        eventRepository.save(event);
+    }
+
+    private boolean hasActiveMembershipForSport(User user, Sport sport) {
+        return membershipService.hasActiveMembership(user.getId(), sport.getSportType());
     }
 
     public void deregisterUser(Event event, User user) {

@@ -33,11 +33,10 @@ public class SportServiceTest {
     public void testAddSport_Success() {
         // Arrange
         SportDto sportDto = new SportDto();
-        sportDto.setName("Football");
-        sportDto.setDescription("A team sport");
+        sportDto.setName("Voetbal");
         sportDto.setSportType(SportType.SPORTS);
 
-        when(sportRepository.findByNameIgnoreCase("Football")).thenReturn(Optional.empty());
+        when(sportRepository.findByNameIgnoreCase("Voetbal")).thenReturn(Optional.empty());
 
         // Act
         sportService.addSport(sportDto);
@@ -50,12 +49,12 @@ public class SportServiceTest {
     public void testAddSport_AlreadyExists() {
         // Arrange
         SportDto sportDto = new SportDto();
-        sportDto.setName("Football");
+        sportDto.setName("Voetbal");
 
         Sport existingSport = new Sport();
-        existingSport.setName("Football");
+        existingSport.setName("Voetbal");
 
-        when(sportRepository.findByNameIgnoreCase("Football")).thenReturn(Optional.of(existingSport));
+        when(sportRepository.findByNameIgnoreCase("Voetbal")).thenReturn(Optional.of(existingSport));
 
         // Act & Assert
         assertThrows(RuntimeException.class, () -> sportService.addSport(sportDto));

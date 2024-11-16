@@ -99,7 +99,7 @@ public class EventController {
                       Event event = eventRepository.findEventById(eventId)
                     .orElseThrow(() -> new RuntimeException("Event with id " + eventId + " does not exist"));
 
-                      eventService.registerUser(event, authenticatedUser);
+                      eventService.addUserToEvent(event, authenticatedUser);
             EventDto updatedEvent = eventService.getEventDto(eventId);
             return ResponseEntity.ok(updatedEvent);
         } catch (RuntimeException e) {

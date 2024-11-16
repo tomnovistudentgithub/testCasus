@@ -22,7 +22,6 @@ public class SportService {
                 });
         Sport sport = new Sport();
         sport.setName(sportDto.getName());
-        sport.setDescription(sportDto.getDescription());
         sport.setSportType(sportDto.getSportType());
         sportRepository.save(sport);
     }
