@@ -49,7 +49,7 @@ public class SportControllerIntegrationTest {
     public void setup() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         sportDto = new SportDto("Basketbal", "Team sport", SportType.SPORTS);
-        Sport sport = sportRepository.save(new Sport(sportDto.getName(), sportDto.getDescription(), sportDto.getSportType()));
+        Sport sport = sportRepository.save(new Sport(sportDto.getName(), sportDto.getSportType()));
         addedSports.add(sport);
     }
 
@@ -65,7 +65,7 @@ public class SportControllerIntegrationTest {
     public void testAddSport() throws Exception {
         mockMvc.perform(post("/api/sports/addSport")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Basketbal\",\"description\":\"Team sport\",\"sportType\":\"SPORTS\"}"))
+                        .content("{\"name\":\"Basketbal\",\"sportType\":\"SPORTS\"}"))
                 .andExpect(status().isOk());
     }
 
