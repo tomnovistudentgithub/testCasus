@@ -3,14 +3,13 @@ insert into roles (active,description, role_name) values (true,'administrator ro
 insert into roles (active,description, role_name) values (true,'user roles' , 'ROLE_USER');
 insert into roles (active,description, role_name) values (true,'planner roles' , 'ROLE_PLANNER');
 
--- Insert users
-insert into users (password, user_name,are_credentials_expired, is_enabled,is_expired,is_locked ) values ('$2a$10$bJxwWc3A3DBzke7Gnb/MZ.lLXmvOIE/DFAd6QUnBvWhn7c7D1zY4C','freddy', false,true,false,false);
-insert into users (password, user_name,are_credentials_expired, is_enabled,is_expired,is_locked) values ('$2a$10$bJxwWc3A3DBzke7Gnb/MZ.lLXmvOIE/DFAd6QUnBvWhn7c7D1zY4C','freeky', false,true,false,false);
+-- Insert users not possible due to password encoding
+
 
 -- Assign roles to users
-insert into user_role (role_id, user_id) values (1,1);
-insert into user_role (role_id, user_id) values (2,2);
-insert into user_role (role_id, user_id) values (2,1);
+
+
+
 
 -- Insert sports
 insert into sport (name, sport_type) values ('Dancehall', 'SPORTS');
@@ -26,6 +25,8 @@ insert into location (name, capacity) values ('Sports hall', 40);
 --
 -- -- Insert sportevents
 insert into event (location_id, start_date, end_date, start_time, end_time, sport_id, available_places)
-values ((select id from location where name = 'Sports hall'), '2023-11-01', '2023-11-01', '08:00:00', '09:00:00', (select id from sport where name = 'Dancehall'), 20);
+values ((select id from location where name = 'Sports hall'), '2024-11-15', '2024-11-15', '08:00:00', '09:00:00', (select id from sport where name = 'Dancehall'), 40);
 insert into event (location_id, start_date, end_date, start_time, end_time, sport_id, available_places)
-values ((select id from location where name = 'Spinning Hall'), '2023-11-01', '2023-11-01', '18:00:00', '19:00:00', (select id from sport where name = 'Spinning'), 25);
+values ((select id from location where name = 'Spinning Hall'), '2024-11-15', '2024-11-15', '18:00:00', '19:00:00', (select id from sport where name = 'Spinning'), 25);
+insert into event (location_id, start_date, end_date, start_time, end_time, sport_id, available_places)
+values ((select id from location where name = 'Gym'), '2024-11-16', '2024-11-16', '18:00:00', '19:00:00', (select id from sport where name = 'Fitness'), 100);

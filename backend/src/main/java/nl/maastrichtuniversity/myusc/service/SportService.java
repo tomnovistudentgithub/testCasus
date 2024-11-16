@@ -9,28 +9,40 @@ import org.springframework.stereotype.Service;
 @Service
 public class SportService {
 
-    SportRepository sportRepository;
+    private final SportRepository sportRepository;
 
     public SportService(SportRepository sportRepository) {
         this.sportRepository = sportRepository;
     }
 
     public void addSport(SportDto sportDto) {
-        sportRepository.findByNameIgnoreCase(sportDto.getName())
-                .ifPresent(s -> {
-                    throw new RuntimeException("Sport with name " + sportDto.getName() + " already exists");
-                });
-        Sport sport = new Sport();
-        sport.setName(sportDto.getName());
-        sport.setDescription(sportDto.getDescription());
-        sport.setSportType(sportDto.getSportType());
+        validateSportDoesNotExist(sportDto.getName());
+        Sport sport = createSportFromDto(sportDto);
         sportRepository.save(sport);
     }
 
+    private void validateSportDoesNotExist(String name) {
+        sportRepository.findByNameIgnoreCase(name)
+                .ifPresent(s -> {
+                    throw new RuntimeException("Sport with name " + name + " already exists");
+                });
+    }
+
+    private Sport createSportFromDto(SportDto sportDto) {
+        Sport sport = new Sport();
+        sport.setName(sportDto.getName());
+        sport.setSportType(sportDto.getSportType());
+        return sport;
+    }
+
     public void deleteSport(Long id) {
+        validateSportExists(id);
+        sportRepository.deleteById(id);
+    }
+
+    private void validateSportExists(Long id) {
         if (!sportRepository.existsById(id)) {
             throw new RuntimeException("Sport with id " + id + " does not exist");
         }
-        sportRepository.deleteById(id);
     }
 }

@@ -4,4 +4,6 @@ public enum MembershipType {
     GYM,
     SPORTS,
     GYM_AND_SPORTS
+
+
 }

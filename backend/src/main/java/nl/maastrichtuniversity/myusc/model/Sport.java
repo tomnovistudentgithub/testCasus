@@ -30,9 +30,11 @@ public class Sport {
     @OneToMany(mappedBy = "sport")
     private List<Event> events;
 
-    public Sport(String name, String description, SportType sportType) {
-    }
+
     public Sport() {
+    }
+
+    public Sport(String name, SportType sportType) {
     }
 
     public Long getId() {
@@ -50,16 +52,6 @@ public class Sport {
     public void setName(String name) {
         this.name = name;
     }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-
 
     public SportType getSportType() {
         return sportType;

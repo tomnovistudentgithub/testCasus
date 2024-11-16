@@ -34,13 +34,6 @@ public class EventDTOMapper {
         dto.setEndTime(event.getEndTime());
         dto.setSport(event.getSport());
         dto.setLocation(event.getLocation());
-
-
-        dto.setSportName(event.getSport().getName());
-        dto.setSportDescription(event.getSport().getDescription());
-        dto.setSportId(event.getSport().getId());
-        dto.setLocationName(event.getLocation().getName());
-        dto.setLocationId(event.getLocation().getId());
         dto.setAvailablePlaces(event.getAvailablePlaces());
 
         dto.setParticipants(event.getUsers().stream()

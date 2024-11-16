@@ -12,46 +12,45 @@ import org.springframework.stereotype.Service;
 @Service
 public class PriceService {
 
-    private double basePrice;
     private final PriceRepository priceRepository;
 
     @Autowired
-    public PriceService(PriceRepository priceRepository, UserRepository userRepository) {
+    public PriceService(PriceRepository priceRepository) {
         this.priceRepository = priceRepository;
-
     }
 
     public double calculatePrice(User user, MembershipType membershipType) {
+        double basePrice = getBasePrice(membershipType);
+        basePrice = applyDiscounts(user, basePrice);
+        savePrice(user, membershipType, basePrice);
+        return basePrice;
+    }
 
-        double basePrice = 0.0;
-        double originalBasePrice = 0.0;
-        UserType userType = user.getUserType();
-
-
+    private double getBasePrice(MembershipType membershipType) {
         switch (membershipType) {
             case GYM_AND_SPORTS:
-                originalBasePrice = 200.0;
-                break;
+                return 200.0;
             case GYM:
-                originalBasePrice = 150.0;
-                break;
+                return 150.0;
             case SPORTS:
-                originalBasePrice = 100.0;
-                break;
+                return 100.0;
+            default:
+                throw new IllegalArgumentException("Invalid membership type");
         }
+    }
 
-        basePrice = originalBasePrice;
-        if (userType == UserType.STUDENT) {
+    private double applyDiscounts(User user, double basePrice) {
+        if (user.getUserType() == UserType.STUDENT) {
             basePrice *= 0.8;
         }
+        return basePrice;
+    }
 
-
+    private void savePrice(User user, MembershipType membershipType, double basePrice) {
         Price price = new Price();
-        price.setUserType(userType);
+        price.setUserType(user.getUserType());
         price.setMembershipType(membershipType);
         price.setPrice(basePrice);
         priceRepository.save(price);
-
-        return basePrice;
     }
 }
