@@ -1,0 +1,26 @@
+sequenceDiagram
+actor Planner
+Planner ->> LocationController : send addLocation request
+activate LocationController
+LocationController ->> LocationService : validate addLocation
+activate LocationService
+LocationService ->> LocationRepository : findByNameIgnoreCase
+activate LocationRepository
+LocationRepository ->> LocationService : return location;
+activate LocationService
+LocationService -->> LocationController : return 401 error;
+deactivate LocationService
+    LocationController -->> Planner : return 401 "already exists";
+Planner ->> LocationController : send other addLocation request
+activate LocationController
+    LocationController ->> LocationService : validate addLocation
+    activate LocationService
+    LocationService ->> LocationRepository : findByNameIgnoreCase
+    LocationRepository -->> LocationService : return empty;
+    deactivate LocationRepository
+    LocationService ->> LocationRepository : saveLocation
+    LocationRepository -->> LocationService : return saved ok.
+    LocationService -->> LocationController : return 200 ok;
+    LocationController -->> Planner : return 200 ok;
+deactivate LocationService
+deactivate LocationController

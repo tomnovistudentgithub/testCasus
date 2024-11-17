@@ -30,15 +30,6 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column
-    private String firstName;
-
-    @Column
-    private String lastName;
-
-    @Column(unique = true)
-    private String email;
-
     @Lob
     private byte[] picture;
 

@@ -22,9 +22,6 @@ public class Location {
     private String name;
 
     @Column
-    private String buildingSection;
-
-    @Column
     private int capacity;
 
     @OneToMany(mappedBy = "location")

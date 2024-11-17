@@ -1,0 +1,60 @@
+sequenceDiagram
+actor User
+User ->> EventController : registration request
+activate EventController
+EventController ->> UserService : validate context User
+activate UserService
+UserService ->> UserRepository : findByUserName
+activate UserRepository
+UserRepository -->> UserService : authenticated user found;
+    deactivate UserRepository
+UserService -->> EventController : return authenticated user;
+deactivate UserService
+EventController ->> EventService : find passed Event
+activate EventService
+EventService ->> EventRepository : findEventById
+    activate EventRepository
+EventRepository -->> EventService : return found event
+deactivate EventRepository
+EventService -->> EventController : return found event to register;
+deactivate EventService
+EventController ->> EventService : add User To Event
+activate EventService
+EventService ->> EventService : validateUserRegistration
+activate EventService
+EventService ->> EventService : hasActiveMembershipForSport
+activate EventService
+EventService ->> MembershipService : validate Active Membership
+activate MembershipService
+MembershipService ->> UserRepository : find user By UserId
+activate UserRepository
+UserRepository -->> MembershipService : return user;
+activate MembershipService
+MembershipService ->> MembershipRepository : find Membership By User
+activate MembershipRepository
+activate MembershipRepository
+MembershipRepository -->> MembershipService : return found membership;
+activate MembershipService
+MembershipService ->> MembershipService : validate is membership Active
+activate MembershipService
+MembershipService -->> EventService : return true;
+deactivate MembershipService
+EventService -->> EventService : validate capacity;
+EventService -->> EventService : set available places -1;
+deactivate EventService
+EventService ->> EventRepository: add user to event and save;
+deactivate EventService
+EventRepository -->> EventService : return event;
+EventService -->> EventController : return event;
+deactivate EventService
+EventController ->> EventService : user event to obtain EventDto
+activate EventService
+EventService ->> EventDTOMapper : map to event Dto
+activate EventDTOMapper
+EventDTOMapper ->> EventDTOMapper : map participants toUserDto
+activate EventDTOMapper
+EventDTOMapper -->> EventService : return eventDto;
+EventService -->> EventController : return eventdto;
+deactivate EventService
+deactivate EventController
+EventController -->> User : return ok and eventDto;

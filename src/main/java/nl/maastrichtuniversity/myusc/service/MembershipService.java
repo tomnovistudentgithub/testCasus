@@ -101,8 +101,6 @@ public class MembershipService {
             throw new IllegalArgumentException("Membership ID and User ID is required");
         }
 
-
-
         Membership membership = membershipRepository.findById(membershipId)
                 .orElseThrow(() -> new IllegalArgumentException("Membership with id " + membershipId + " not found"));
 

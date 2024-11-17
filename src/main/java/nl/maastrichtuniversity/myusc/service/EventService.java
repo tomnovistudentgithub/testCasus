@@ -40,7 +40,7 @@ public class EventService {
         return eventMapper.toDto(event);
     }
 
-    private Event findEventById(Long eventId) {
+    public Event findEventById(Long eventId) {
         return eventRepository.findById(eventId)
                 .orElseThrow(() -> new RuntimeException("Event with id " + eventId + " does not exist"));
     }

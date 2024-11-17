@@ -9,6 +9,7 @@ import nl.maastrichtuniversity.myusc.repository.LocationRepository;
 import nl.maastrichtuniversity.myusc.repository.SportRepository;
 import nl.maastrichtuniversity.myusc.repository.UserRepository;
 import nl.maastrichtuniversity.myusc.service.EventService;
+import nl.maastrichtuniversity.myusc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,16 +33,18 @@ public class EventController {
     private final SportRepository sportRepository;
     private final LocationRepository locationRepository;
     private final EventDTOMapper eventMapper;
+    private final UserService userService;
 
 
     @Autowired
-    public EventController(EventService eventService, EventRepository eventRepository, UserRepository userRepository, SportRepository sportRepository, LocationRepository locationRepository, EventDTOMapper eventMapper) {
+    public EventController(EventService eventService, EventRepository eventRepository, UserRepository userRepository, SportRepository sportRepository, LocationRepository locationRepository, EventDTOMapper eventMapper, UserService userService) {
         this.eventService = eventService;
         this.eventRepository = eventRepository;
         this.userRepository = userRepository;
         this.sportRepository = sportRepository;
         this.locationRepository = locationRepository;
         this.eventMapper = eventMapper;
+        this.userService = userService;
     }
 
     @GetMapping("/{eventId}/details")
@@ -93,14 +96,12 @@ public class EventController {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String authenticatedUsername = authentication.getName();
 
-            User authenticatedUser = userRepository.findByUserName(authenticatedUsername)
-                    .orElseThrow(() -> new RuntimeException("Authenticated user not found"));
+            User authenticatedUser = userService.getUserByUserName(authenticatedUsername);
 
-                      Event event = eventRepository.findEventById(eventId)
-                    .orElseThrow(() -> new RuntimeException("Event with id " + eventId + " does not exist"));
+            Event event = eventService.findEventById(eventId);
+                   eventService.addUserToEvent(event, authenticatedUser);
 
-                      eventService.addUserToEvent(event, authenticatedUser);
-            EventDto updatedEvent = eventService.getEventDto(eventId);
+                   EventDto updatedEvent = eventService.getEventDto(eventId);
             return ResponseEntity.ok(updatedEvent);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -113,11 +114,11 @@ public class EventController {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String authenticatedUsername = authentication.getName();
 
-            User authenticatedUser = userRepository.findByUserName(authenticatedUsername)
-                    .orElseThrow(() -> new RuntimeException("Authenticated user not found"));
+            User authenticatedUser = userService.getUserByUserName(authenticatedUsername);
 
-            Event event = eventRepository.findEventById(eventId)
-                    .orElseThrow(() -> new RuntimeException("Event with id " + eventId + " does not exist"));
+            Event event = eventService.findEventById(eventId);
+            eventService.addUserToEvent(event, authenticatedUser);
+
 
             eventService.deregisterUser(event, authenticatedUser);
             EventDto updatedEvent = eventService.getEventDto(eventId);

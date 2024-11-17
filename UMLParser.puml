@@ -1,0 +1,665 @@
+@startuml
+class nl.maastrichtuniversity.myusc.entities.Role {
+- Long id
+- String roleName
+- boolean active
+- String description
+- List<User> users
++ Long getId()
++ List<User> getUsers()
++ void setUsers(List<User>)
++ String getRoleName()
++ void setRoleName(String)
++ boolean isActive()
++ void setActive(boolean)
++ String getDescription()
++ void setDescription(String)
+}
+
+
+interface nl.maastrichtuniversity.myusc.repository.UserRepository {
+~ Optional<User> findById(Long)
+~ Optional<User> findByUserName(String)
+~ void deleteById(Long)
+~ Optional<User> findByUserNameAndPassword(String,String)
+}
+
+interface nl.maastrichtuniversity.myusc.repository.RoleRepository {
+~ List<Role> findByRoleNameIn(List<String>)
+}
+
+class nl.maastrichtuniversity.myusc.service.UserService {
+- UserRepository userRepository
++ User getUser(Long)
++ User updateUser(User)
++ User getUserById(Long)
++ User getUserByUserName(String)
++ byte[] getUserPicture(Long)
++ void saveUserPicture(Long,MultipartFile)
++ void deleteUserPicture(Long)
+}
+
+
+enum nl.maastrichtuniversity.myusc.model.SportType {
++  SPORTS
++  GYM
+}
+
+class nl.maastrichtuniversity.myusc.mappers.RoleMapper {
++ RoleModel fromEntity(Role)
++ Role toEntity(RoleModel)
++ List<RoleModel> fromEntities(List<Role>)
++ List<Role> toEntities(List<RoleModel>)
+}
+
+class nl.maastrichtuniversity.myusc.dtos.EventDTOMapper {
+- SportRepository sportRepository
+- LocationRepository locationRepository
++ EventDto toDto(Event)
+- UserDTO toUserDto(User)
++ Event toEntityForCreate(EventDto)
+}
+
+
+class nl.maastrichtuniversity.myusc.controller.UserController {
+- UserService userService
+- UserDTOMapper userDTOMapper
+- MyUSCUserDetailsService myUSCUserDetailsService
+- HttpServletRequest request
++ ResponseEntity<User> getUser(Long)
++ ResponseEntity<?> CreateUser(UserRequestDTO)
++ ResponseEntity<User> updateUserType(Long,UserType)
++ ResponseEntity<?> uploadPicture(MultipartFile)
++ ResponseEntity<byte[]> downloadPicture()
++ ResponseEntity<?> deletePicture(Long)
+}
+
+
+class nl.maastrichtuniversity.myusc.MyUscApplication {
++ {static} void main(String[])
+}
+
+class nl.maastrichtuniversity.myusc.mappers.UserMapper {
+- RoleMapper roleMapper
+- PasswordEncoder passwordEncoder
++ UserModel fromEntity(User)
++ User toEntity(UserModel)
+}
+
+
+class nl.maastrichtuniversity.myusc.dtos.UserDTO {
+- Long id
+- String userName
++ Long getId()
++ void setId(Long)
++ String getUserName()
++ void setUserName(String)
+}
+
+
+class nl.maastrichtuniversity.myusc.model.Price {
+- long id
+- UserType userType
+- MembershipType membershipType
+- double price
++ long getId()
++ void setId(long)
++ UserType getUserType()
++ void setUserType(UserType)
++ MembershipType getMembershipType()
++ void setMembershipType(MembershipType)
++ double getPrice()
++ void setPrice(double)
+}
+
+
+class nl.maastrichtuniversity.myusc.controller.SportsController {
+~ SportService sportsService
++ ResponseEntity<?> addSports(SportDto)
++ ResponseEntity<?> deleteSport(Long)
+}
+
+
+interface nl.maastrichtuniversity.myusc.repository.MembershipRepository {
+~ Optional<Membership> findByUser(User)
+~ void deleteById(Long)
+}
+
+class nl.maastrichtuniversity.myusc.controller.LocationController {
+- LocationService locationService
++ ResponseEntity<?> addLocation(LocationDto)
++ ResponseEntity<?> deleteLocation(Long)
+}
+
+
+class nl.maastrichtuniversity.myusc.controller.AuthController {
+- AuthenticationManager authManager
+- JwtService jwtService
++ ResponseEntity<Object> login(UserLoginRequestDTO)
+}
+
+
+class nl.maastrichtuniversity.myusc.model.Membership {
+- Long id
+- MembershipType membershipType
+- UserType userType
+- double price
+- LocalDate startDate
+- LocalDate expirationDate
+- User user
++ LocalDate getStartDate()
++ void setStartDate(LocalDate)
++ LocalDate getExpirationDate()
++ void setExpirationDate(LocalDate)
++ MembershipType getMembershipType()
++ void setMembershipType(MembershipType)
++ UserType getUserType()
++ void setUserType(UserType)
++ double getPrice()
++ void setPrice(double)
++ User getUser()
++ void setUser(User)
++ void setId(Long)
++ Long getId()
+}
+
+
+class nl.maastrichtuniversity.myusc.model.Event {
+- Long id
+- Location location
+- LocalDate startDate
+- LocalDate endDate
+- LocalTime startTime
+- LocalTime endTime
+- Sport sport
+- List<User> users
+- int availablePlaces
++ List<User> getUsers()
++ void setUsers(List<User>)
++ void prePersist()
++ void setAvailablePlaces(int)
++ Sport getSport()
++ void setSport(Sport)
++ Long getId()
++ void setId(Long)
++ LocalDate getStartDate()
++ void setStartDate(LocalDate)
++ LocalDate getEndDate()
++ void setEndDate(LocalDate)
++ LocalTime getStartTime()
++ void setStartTime(LocalTime)
++ LocalTime getEndTime()
++ void setEndTime(LocalTime)
++ void setLocation(Location)
++ Location getLocation()
++ List<User> getParticipants()
++ int getAvailablePlaces()
+}
+
+
+class nl.maastrichtuniversity.myusc.dtos.LocationDto {
+- Long id
+- String name
+- int capacity
++ void setId(Long)
++ Long getId()
++ String getName()
++ void setName(String)
++ int getCapacity()
++ void setCapacity(int)
+}
+
+
+class nl.maastrichtuniversity.myusc.dtos.EventDto {
+- Long id
+- LocalDate startDate
+- LocalDate endDate
+- LocalTime startTime
+- LocalTime endTime
+- Sport sport
+- Location location
+- int availablePlaces
+- List<UserDTO> participants
++ List<UserDTO> getParticipants()
++ void setParticipants(List<UserDTO>)
++ Long getId()
++ void setId(Long)
++ int getAvailablePlaces()
++ void setAvailablePlaces(int)
++ LocalDate getStartDate()
++ void setStartDate(LocalDate)
++ LocalDate getEndDate()
++ LocalTime getStartTime()
++ void setStartTime(LocalTime)
++ LocalTime getEndTime()
++ void setEndTime(LocalTime)
++ void setEndDate(LocalDate)
++ Sport getSport()
++ void setSport(Sport)
++ Location getLocation()
++ void setLocation(Location)
+}
+
+
+class nl.maastrichtuniversity.myusc.dtos.UserLoginRequestDTO {
+- String userName
+- String password
++ String getUserName()
++ void setUserName(String)
++ String getPassword()
++ void setPassword(String)
+}
+
+
+enum nl.maastrichtuniversity.myusc.model.MembershipType {
++  GYM
++  SPORTS
++  GYM_AND_SPORTS
+}
+
+class nl.maastrichtuniversity.myusc.service.SportService {
+- SportRepository sportRepository
++ void addSport(SportDto)
+- void validateSportDoesNotExist(String)
+- Sport createSportFromDto(SportDto)
++ void deleteSport(Long)
+- void validateSportExists(Long)
+}
+
+
+interface nl.maastrichtuniversity.myusc.repository.EventRepository {
+~ Optional<Event> findEventById(Long)
+~ Optional<Event> findBySportIdAndStartDateAndStartTime(Long,LocalDate,LocalTime)
+~ Optional<Object> findBySportId(Long)
+}
+
+enum nl.maastrichtuniversity.myusc.model.UserType {
++  STUDENT
++  OTHER
+}
+
+class nl.maastrichtuniversity.myusc.service.PriceService {
+- PriceRepository priceRepository
++ double calculatePrice(User,MembershipType)
+- double getBasePrice(MembershipType)
+- double applyDiscounts(User,double)
+- void savePrice(User,MembershipType,double)
+}
+
+
+class nl.maastrichtuniversity.myusc.model.RoleModel {
+- Long id
+- String roleName
+- boolean active
+- String description
++ Long getId()
++ String getRoleName()
++ void setRoleName(String)
++ boolean isActive()
++ void setActive(boolean)
++ String getDescription()
++ void setDescription(String)
+}
+
+
+class nl.maastrichtuniversity.myusc.service.LocationService {
+- LocationRepository locationRepository
++ void addLocation(LocationDto)
++ void deleteLocation(Long)
+}
+
+
+class nl.maastrichtuniversity.myusc.model.Location {
+- Long id
+- String name
+- int capacity
+- List<Event> events
++ Long getId()
++ void setId(Long)
++ String getName()
++ void setName(String)
++ int getCapacity()
++ void setCapacity(int)
+}
+
+
+class nl.maastrichtuniversity.myusc.controller.EventController {
+- EventService eventService
+- EventRepository eventRepository
+- UserRepository userRepository
+- SportRepository sportRepository
+- LocationRepository locationRepository
+- EventDTOMapper eventMapper
++ ResponseEntity<?> getEventDetails(Long)
++ ResponseEntity<?> getAllEvents()
++ ResponseEntity<?> createEvent(EventDto)
++ ResponseEntity<?> deleteEvent(Long)
++ ResponseEntity<?> registerUser(Long)
++ ResponseEntity<?> deregisterUser(Long)
+}
+
+
+class nl.maastrichtuniversity.myusc.service.MyUSCUserDetailsService {
+- UserRepository userRepository
+- UserMapper userMapper
+- RoleRepository roleRepository
+- RoleMapper roleMapper
++ boolean createUser(UserModel,List<String>)
+- void validateUserDoesNotExist(String)
+- void addRolesToUser(User,List<Role>)
+- void updateRolesWithUser(User)
++ boolean createUser(UserModel,String[])
++ Optional<UserModel> getUserByUserName(String)
++ Optional<UserModel> getUserByUserNameAndPassword(String,String)
+- Optional<UserModel> getOptionalUserModel(Optional<User>)
++ UserDetails loadUserByUsername(String)
++ boolean updatePassword(UserModel)
+}
+
+
+class nl.maastrichtuniversity.myusc.security.MyUSCUserDetails {
+- UserModel user
++ Collection<? extends GrantedAuthority> getAuthorities()
++ String getPassword()
++ String getUsername()
++ boolean isAccountNonExpired()
++ boolean isAccountNonLocked()
++ boolean isCredentialsNonExpired()
++ boolean isEnabled()
+}
+
+
+class nl.maastrichtuniversity.myusc.dtos.PriceRequestDto {
+- Long userId
+- UserType userType
+- MembershipType membershipType
++ Long getUserId()
++ UserType getUserType()
++ void setUserType(UserType)
++ MembershipType getMembershipType()
++ void setMembershipType(MembershipType)
+}
+
+
+class nl.maastrichtuniversity.myusc.dtos.SportDto {
+- Long id
+- String name
+- String description
+- SportType sportType
++ Long getId()
++ void setId(Long)
++ String getName()
++ SportType getSportType()
++ void setSportType(SportType)
++ void setName(String)
+}
+
+
+interface nl.maastrichtuniversity.myusc.repository.LocationRepository {
+~ Optional<Location> findByNameIgnoreCase(String)
+}
+
+class nl.maastrichtuniversity.myusc.controller.MembershipController {
+- MembershipService membershipService
++ ResponseEntity<?> addMembership(MembershipDto)
++ ResponseEntity<?> deleteMembership(Long,Long)
+}
+
+
+class nl.maastrichtuniversity.myusc.dtos.UserRequestDTO {
+- String userName
+- String password
+- String[] roles
++ String getUserName()
++ void setUserName(String)
++ String getPassword()
++ void setPassword(String)
++ String[] getRoles()
++ void setRoles(String[])
+}
+
+
+class nl.maastrichtuniversity.myusc.security.SecurityConfig {
++ PasswordEncoder passwordEncoder()
++ SecurityFilterChain filterChain(HttpSecurity,JwtRequestFilter)
++ AuthenticationManager authManager(HttpSecurity,PasswordEncoder,UserDetailsService)
+}
+
+class nl.maastrichtuniversity.myusc.security.JwtRequestFilter {
+- JwtService jwtService
+# void doFilterInternal(HttpServletRequest,HttpServletResponse,FilterChain)
+- String extractJwtFromRequest(HttpServletRequest)
+- void processTokenAndSetAuthentication(String,HttpServletRequest)
+- void setAuthentication(String,List<GrantedAuthority>,HttpServletRequest,String)
+}
+
+
+interface nl.maastrichtuniversity.myusc.repository.SportRepository {
+~ Optional<Sport> findByNameIgnoreCase(String)
+}
+
+interface nl.maastrichtuniversity.myusc.repository.PriceRepository {
+~ Price findByUserTypeAndMembershipType(UserType,MembershipType)
+}
+
+class nl.maastrichtuniversity.myusc.dtos.UserDTOMapper {
++ UserModel mapToModel(UserRequestDTO)
++ UserModel mapToModel(UserChangePasswordRequestDTO,Long)
+}
+
+class nl.maastrichtuniversity.myusc.dtos.UserChangePasswordRequestDTO {
+- String password
++ String getPassword()
++ void setPassword(String)
+}
+
+
+class nl.maastrichtuniversity.myusc.model.UserModel {
+- Long id
+- String userName
+- String password
+- List<RoleModel> roles
+- boolean isExpired
+- boolean isLocked
+- boolean areCredentialsExpired
+- boolean isEnabled
+- String firstName
+- String lastName
+- String email
+- int enrollmentYear
+- Integer enrollmentMonth
+- List<Event> events
+- List<Membership> memberships
+- UserType userType
++ Long getId()
++ void setId(Long)
++ String getUserName()
++ void setUserName(String)
++ String getPassword()
++ void setPassword(String)
++ List<RoleModel> getRoles()
++ void setRoles(List<RoleModel>)
++ boolean isExpired()
++ void setExpired(boolean)
++ boolean isLocked()
++ void setLocked(boolean)
++ boolean areCredentialsExpired()
++ void areCredentialsExpired(boolean)
++ boolean isEnabled()
++ void setEnabled(boolean)
++ String getFirstName()
++ void setFirstName(String)
++ String getLastName()
++ void setLastName(String)
++ String getEmail()
++ void setEmail(String)
++ int getEnrollmentYear()
++ void setEnrollmentYear(int)
++ Integer getEnrollmentMonth()
++ void setEnrollmentMonth(Integer)
++ List<Event> getEvents()
++ void setEvents(List<Event>)
++ List<Membership> getMemberships()
++ void setMemberships(List<Membership>)
++ UserType getUserType()
++ void setUserType(UserType)
++ List<String> getRoleNames()
+}
+
+
+class nl.maastrichtuniversity.myusc.helpers.UrlHelper {
++ {static} String getCurrentUrlString(HttpServletRequest)
++ {static} String getCurrentUrlString(HttpServletRequest,Long)
++ {static} URI getCurrentUrl(HttpServletRequest)
++ {static} URI getCurrentUrlWithId(HttpServletRequest,Long)
+- {static} URI convertToURI(String)
+}
+
+class nl.maastrichtuniversity.myusc.entities.User {
+- Long id
+- String userName
+- String password
+- byte[] picture
+- UserType userType
+- boolean isExpired
+- boolean isLocked
+- boolean areCredentialsExpired
+- boolean isEnabled
+- List<Role> roles
+- List<Event> events
+- List<Membership> memberships
++ String getUserName()
++ void setUserName(String)
++ byte[] getPicture()
++ void setPicture(byte[])
++ List<Role> getRoles()
++ void setRoles(List<Role>)
++ boolean isExpired()
++ void setExpired(boolean)
++ boolean isLocked()
++ void setLocked(boolean)
++ boolean areCredentialsExpired()
++ void setAreCredentialsExpired(boolean)
++ boolean isEnabled()
++ void setEnabled(boolean)
++ List<Event> getEvents()
++ void setEvents(List<Event>)
++ Long getId()
++ void setId(Long)
++ String getPassword()
++ void setPassword(String)
++ List<Membership> getMemberships()
++ void setMemberships(List<Membership>)
++ UserType getUserType()
++ void setUserType(UserType)
+}
+
+
+class nl.maastrichtuniversity.myusc.service.EventService {
+- EventRepository eventRepository
+- SportRepository sportRepository
+- UserRepository userRepository
+- EventDTOMapper eventMapper
+- MembershipService membershipService
++ EventDto getEventDto(Long)
+- Event findEventById(Long)
++ EventDto createEvent(EventDto)
+- void validateEvent(Event)
+- void setEventDetails(Event,EventDto)
++ void deleteEvent(Long)
+- void validateUserRegistration(Event,User)
++ void addUserToEvent(Event,User)
+- boolean hasActiveMembershipForSport(User,Sport)
++ void deregisterUser(Event,User)
+}
+
+
+class nl.maastrichtuniversity.myusc.service.MembershipService {
+~ MembershipRepository membershipRepository
+~ UserRepository userRepository
+~ PriceService priceService
++ Membership createMembership(MembershipDto)
++ Boolean isUserAlreadyActiveMember(User)
++ Boolean isActive(LocalDate,LocalDate)
++ void deleteMembership(Long,Long)
++ boolean hasActiveMembership(Long,SportType)
+}
+
+
+class nl.maastrichtuniversity.myusc.model.Sport {
+- Long id
+- String name
+- String description
+- SportType sportType
+- List<Event> events
++ Long getId()
++ void setId(Long)
++ String getName()
++ void setName(String)
++ SportType getSportType()
++ void setSportType(SportType)
++ List<Event> getEvents()
++ void setEvents(List<Event>)
+}
+
+
+class nl.maastrichtuniversity.myusc.dtos.MembershipDto {
+- Long userId
+- MembershipType membershipType
+- int enrollmentYear
+- int enrollmentMonth
+- LocalDate startDate
+- LocalDate expirationDate
++ Long getUserId()
++ void setUserId(Long)
++ MembershipType getMembershipType()
++ void setMembershipType(MembershipType)
++ int getEnrollmentYear()
++ void setEnrollmentYear(int)
++ int getEnrollmentMonth()
++ void setEnrollmentMonth(int)
++ LocalDate getStartDate()
++ void setStartDate(LocalDate)
++ LocalDate getExpirationDate()
++ void setExpirationDate(LocalDate)
+}
+
+
+class nl.maastrichtuniversity.myusc.security.JwtService {
+- String SECRET_KEY
+- String AUDIENCE
+- String ROLES_CLAIMS_NAME
+- String ORGANISATION
+- String ORGANISATION_NAME
+- Key getSigningKey()
++ String extractUsername(String)
++ String extractAudience(String)
++ List<String> extractRoles(String)
++ List<GrantedAuthority> extractSimpleGrantedAuthorities(String)
+- {static} List<GrantedAuthority> GetAsListSimpleGrantedAuthorities(List<String>)
+- Date extractExpiration(String)
+- T extractClaim(String,Function<Claims,T>)
+- Claims extractAllClaims(String)
+- Boolean isTokenExpired(String)
++ String generateToken(MyUSCUserDetails)
++ String generateToken(MyUSCUserDetails,Long)
+- String createToken(Map<String,Object>,String,long)
+- String createToken(Map<String,Object>,String,long,long)
++ Boolean validateToken(String)
++ String extractOrganisation(String)
+}
+
+
+
+
+org.springframework.data.jpa.repository.JpaRepository <|-- nl.maastrichtuniversity.myusc.repository.UserRepository
+org.springframework.data.jpa.repository.JpaRepository <|-- nl.maastrichtuniversity.myusc.repository.RoleRepository
+org.springframework.data.jpa.repository.JpaRepository <|-- nl.maastrichtuniversity.myusc.repository.MembershipRepository
+org.springframework.data.jpa.repository.JpaRepository <|-- nl.maastrichtuniversity.myusc.repository.EventRepository
+org.springframework.security.core.userdetails.UserDetailsService <|.. nl.maastrichtuniversity.myusc.service.MyUSCUserDetailsService
+org.springframework.security.core.userdetails.UserDetails <|.. nl.maastrichtuniversity.myusc.security.MyUSCUserDetails
+org.springframework.data.jpa.repository.JpaRepository <|-- nl.maastrichtuniversity.myusc.repository.LocationRepository
+org.springframework.web.filter.OncePerRequestFilter <|-- nl.maastrichtuniversity.myusc.security.JwtRequestFilter
+org.springframework.data.jpa.repository.JpaRepository <|-- nl.maastrichtuniversity.myusc.repository.SportRepository
+org.springframework.data.jpa.repository.JpaRepository <|-- nl.maastrichtuniversity.myusc.repository.PriceRepository
+@enduml
