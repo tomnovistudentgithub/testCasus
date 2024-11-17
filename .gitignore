@@ -28,6 +28,9 @@ out/
 !src/test/**/out/
 /src/main/resources/application.properties
 
+### Maven ###
+target/
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
